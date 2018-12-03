@@ -24,7 +24,7 @@ namespace Derecho.Transformadores
 			List<string> resultado = new List<string>();
 			foreach (Entidad ent in entidades)
 			{
-				string nbreClase = CamelCase(ent.Nombre, "_");//CAMEL CASE
+				string nbreClase = Utils.CamelCase(ent.Nombre, "_");//CAMEL CASE
 				nbreClase = nbreClase.StartsWith("T_") ? nbreClase.Substring(2) : nbreClase;//SACAR T_
 				nbreClase += "View";
 				StringBuilder sb = new StringBuilder();
@@ -38,7 +38,7 @@ namespace Derecho.Transformadores
 					foreach (Atributo attr in ent.Atributos)
 					{
 						sb.Append(TAB, 2);
-						sb.AppendLine("public " + ConvertirTipo(attr.Tipo, attr.Nombre) + " " + CamelCase(attr.Nombre, "_") + " { get; set; }");
+						sb.AppendLine("public " + ConvertirTipo(attr.Tipo, attr.Nombre) + " " + Utils.CamelCase(attr.Nombre, "_") + " { get; set; }");
 					}
 					sb.AppendLine(TAB + "}");
 				}
@@ -110,23 +110,5 @@ namespace Derecho.Transformadores
 			}
 			return "object";
 		}
-
-		public static string CamelCase(string nbre, string actSeparador, string nvoSeparador = null)
-		{
-			nvoSeparador = nvoSeparador ?? actSeparador;
-			Func<String, String> camelCase = x => x.Substring(0, 1).ToUpper() +
-					 (x.Length > 1 ? x.Substring(1).ToLower() : "");
-			if (nbre.Contains(actSeparador))
-			{
-				return String.Join(nvoSeparador,
-					nbre.Split(new[] { actSeparador }, StringSplitOptions.RemoveEmptyEntries)
-					.Select(camelCase)
-				);
-			}
-			else
-			{
-				return camelCase(nbre);
-			}
-		} 
 	}
 }

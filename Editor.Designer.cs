@@ -29,15 +29,15 @@
 		private void InitializeComponent()
 		{
 			this.splitMain = new System.Windows.Forms.SplitContainer();
-			this.panel1 = new System.Windows.Forms.Panel();
 			this.tbTexto = new System.Windows.Forms.TextBox();
+			this.panel1 = new System.Windows.Forms.Panel();
 			this.gbEdicion = new System.Windows.Forms.GroupBox();
-			this.tbBuscar = new System.Windows.Forms.TextBox();
-			this.tbReemplazar = new System.Windows.Forms.TextBox();
-			this.label1 = new System.Windows.Forms.Label();
-			this.label2 = new System.Windows.Forms.Label();
-			this.bBuscar = new System.Windows.Forms.Button();
 			this.bReemplazar = new System.Windows.Forms.Button();
+			this.bBuscar = new System.Windows.Forms.Button();
+			this.label2 = new System.Windows.Forms.Label();
+			this.label1 = new System.Windows.Forms.Label();
+			this.tbReemplazar = new System.Windows.Forms.TextBox();
+			this.tbBuscar = new System.Windows.Forms.TextBox();
 			((System.ComponentModel.ISupportInitialize)(this.splitMain)).BeginInit();
 			this.splitMain.Panel1.SuspendLayout();
 			this.splitMain.Panel2.SuspendLayout();
@@ -64,6 +64,17 @@
 			this.splitMain.SplitterDistance = 661;
 			this.splitMain.TabIndex = 0;
 			// 
+			// tbTexto
+			// 
+			this.tbTexto.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tbTexto.Location = new System.Drawing.Point(0, 0);
+			this.tbTexto.Multiline = true;
+			this.tbTexto.Name = "tbTexto";
+			this.tbTexto.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+			this.tbTexto.Size = new System.Drawing.Size(661, 530);
+			this.tbTexto.TabIndex = 0;
+			this.tbTexto.WordWrap = false;
+			// 
 			// panel1
 			// 
 			this.panel1.Controls.Add(this.gbEdicion);
@@ -72,15 +83,6 @@
 			this.panel1.Name = "panel1";
 			this.panel1.Size = new System.Drawing.Size(233, 530);
 			this.panel1.TabIndex = 0;
-			// 
-			// tbTexto
-			// 
-			this.tbTexto.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tbTexto.Location = new System.Drawing.Point(0, 0);
-			this.tbTexto.Multiline = true;
-			this.tbTexto.Name = "tbTexto";
-			this.tbTexto.Size = new System.Drawing.Size(661, 530);
-			this.tbTexto.TabIndex = 0;
 			// 
 			// gbEdicion
 			// 
@@ -99,41 +101,15 @@
 			this.gbEdicion.TabStop = false;
 			this.gbEdicion.Text = "Buscar y Reemplazar";
 			// 
-			// tbBuscar
+			// bReemplazar
 			// 
-			this.tbBuscar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.tbBuscar.Location = new System.Drawing.Point(6, 45);
-			this.tbBuscar.Name = "tbBuscar";
-			this.tbBuscar.Size = new System.Drawing.Size(215, 20);
-			this.tbBuscar.TabIndex = 0;
-			// 
-			// tbReemplazar
-			// 
-			this.tbReemplazar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.tbReemplazar.Location = new System.Drawing.Point(6, 84);
-			this.tbReemplazar.Name = "tbReemplazar";
-			this.tbReemplazar.Size = new System.Drawing.Size(215, 20);
-			this.tbReemplazar.TabIndex = 0;
-			// 
-			// label1
-			// 
-			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(7, 26);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(40, 13);
-			this.label1.TabIndex = 1;
-			this.label1.Text = "Buscar";
-			// 
-			// label2
-			// 
-			this.label2.AutoSize = true;
-			this.label2.Location = new System.Drawing.Point(6, 68);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(63, 13);
-			this.label2.TabIndex = 1;
-			this.label2.Text = "Reemplazar";
+			this.bReemplazar.Location = new System.Drawing.Point(145, 110);
+			this.bReemplazar.Name = "bReemplazar";
+			this.bReemplazar.Size = new System.Drawing.Size(76, 23);
+			this.bReemplazar.TabIndex = 2;
+			this.bReemplazar.Text = "Reemplazar";
+			this.bReemplazar.UseVisualStyleBackColor = true;
+			this.bReemplazar.Click += new System.EventHandler(this.bReemplazar_Click);
 			// 
 			// bBuscar
 			// 
@@ -145,15 +121,41 @@
 			this.bBuscar.UseVisualStyleBackColor = true;
 			this.bBuscar.Click += new System.EventHandler(this.bBuscar_Click);
 			// 
-			// bReemplazar
+			// label2
 			// 
-			this.bReemplazar.Location = new System.Drawing.Point(145, 110);
-			this.bReemplazar.Name = "bReemplazar";
-			this.bReemplazar.Size = new System.Drawing.Size(76, 23);
-			this.bReemplazar.TabIndex = 2;
-			this.bReemplazar.Text = "Reemplazar";
-			this.bReemplazar.UseVisualStyleBackColor = true;
-			this.bReemplazar.Click += new System.EventHandler(this.bReemplazar_Click);
+			this.label2.AutoSize = true;
+			this.label2.Location = new System.Drawing.Point(6, 68);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(63, 13);
+			this.label2.TabIndex = 1;
+			this.label2.Text = "Reemplazar";
+			// 
+			// label1
+			// 
+			this.label1.AutoSize = true;
+			this.label1.Location = new System.Drawing.Point(7, 26);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(40, 13);
+			this.label1.TabIndex = 1;
+			this.label1.Text = "Buscar";
+			// 
+			// tbReemplazar
+			// 
+			this.tbReemplazar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.tbReemplazar.Location = new System.Drawing.Point(6, 84);
+			this.tbReemplazar.Name = "tbReemplazar";
+			this.tbReemplazar.Size = new System.Drawing.Size(215, 20);
+			this.tbReemplazar.TabIndex = 0;
+			// 
+			// tbBuscar
+			// 
+			this.tbBuscar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.tbBuscar.Location = new System.Drawing.Point(6, 45);
+			this.tbBuscar.Name = "tbBuscar";
+			this.tbBuscar.Size = new System.Drawing.Size(215, 20);
+			this.tbBuscar.TabIndex = 0;
 			// 
 			// Editor
 			// 

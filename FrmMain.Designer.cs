@@ -40,6 +40,11 @@
 			this.archivoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.importarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.erwinXMLToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.dLLToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.exportarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.archivoActualToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.archivosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.portapapelesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
 			this.salirToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.xToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -121,6 +126,8 @@
 			this.imgList.Images.SetKeyName(2, "Importar");
 			this.imgList.Images.SetKeyName(3, "Salir");
 			this.imgList.Images.SetKeyName(4, "CSharp");
+			this.imgList.Images.SetKeyName(5, "DLL");
+			this.imgList.Images.SetKeyName(6, "Oracle");
 			// 
 			// menuStrip1
 			// 
@@ -138,6 +145,7 @@
 			// 
 			this.archivoToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.importarToolStripMenuItem,
+            this.exportarToolStripMenuItem,
             this.toolStripSeparator1,
             this.salirToolStripMenuItem});
 			this.archivoToolStripMenuItem.Name = "archivoToolStripMenuItem";
@@ -147,10 +155,11 @@
 			// importarToolStripMenuItem
 			// 
 			this.importarToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.erwinXMLToolStripMenuItem});
+            this.erwinXMLToolStripMenuItem,
+            this.dLLToolStripMenuItem});
 			this.importarToolStripMenuItem.Image = global::Derecho.Recursos.Importar;
 			this.importarToolStripMenuItem.Name = "importarToolStripMenuItem";
-			this.importarToolStripMenuItem.Size = new System.Drawing.Size(120, 22);
+			this.importarToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
 			this.importarToolStripMenuItem.Text = "Importar";
 			// 
 			// erwinXMLToolStripMenuItem
@@ -161,16 +170,61 @@
 			this.erwinXMLToolStripMenuItem.Text = "Erwin XML";
 			this.erwinXMLToolStripMenuItem.Click += new System.EventHandler(this.erwinXMLToolStripMenuItem_Click);
 			// 
+			// dLLToolStripMenuItem
+			// 
+			this.dLLToolStripMenuItem.Image = global::Derecho.Recursos.DLL;
+			this.dLLToolStripMenuItem.Name = "dLLToolStripMenuItem";
+			this.dLLToolStripMenuItem.Size = new System.Drawing.Size(130, 22);
+			this.dLLToolStripMenuItem.Text = "DLL";
+			this.dLLToolStripMenuItem.Click += new System.EventHandler(this.dllToolStripMenuItem_Click);
+			// 
+			// exportarToolStripMenuItem
+			// 
+			this.exportarToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.archivoActualToolStripMenuItem,
+            this.archivosToolStripMenuItem,
+            this.portapapelesToolStripMenuItem});
+			this.exportarToolStripMenuItem.Image = global::Derecho.Recursos.Exportar;
+			this.exportarToolStripMenuItem.Name = "exportarToolStripMenuItem";
+			this.exportarToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.exportarToolStripMenuItem.Text = "Exportar";
+			// 
+			// archivoActualToolStripMenuItem
+			// 
+			this.archivoActualToolStripMenuItem.Image = global::Derecho.Recursos.Archivo;
+			this.archivoActualToolStripMenuItem.Name = "archivoActualToolStripMenuItem";
+			this.archivoActualToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.archivoActualToolStripMenuItem.Text = "Archivo Actual";
+			this.archivoActualToolStripMenuItem.Click += new System.EventHandler(this.archivoActualToolStripMenuItem_Click);
+			// 
+			// archivosToolStripMenuItem
+			// 
+			this.archivosToolStripMenuItem.Image = global::Derecho.Recursos.Archivos;
+			this.archivosToolStripMenuItem.Name = "archivosToolStripMenuItem";
+			this.archivosToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.archivosToolStripMenuItem.Text = "Todos los Archivos";
+			this.archivosToolStripMenuItem.Click += new System.EventHandler(this.archivosToolStripMenuItem_Click);
+			// 
+			// portapapelesToolStripMenuItem
+			// 
+			this.portapapelesToolStripMenuItem.Image = global::Derecho.Recursos.Clipboard;
+			this.portapapelesToolStripMenuItem.Name = "portapapelesToolStripMenuItem";
+			this.portapapelesToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.C)));
+			this.portapapelesToolStripMenuItem.Size = new System.Drawing.Size(230, 22);
+			this.portapapelesToolStripMenuItem.Text = "Portapapeles";
+			this.portapapelesToolStripMenuItem.Click += new System.EventHandler(this.portapapelesToolStripMenuItem_Click);
+			// 
 			// toolStripSeparator1
 			// 
 			this.toolStripSeparator1.Name = "toolStripSeparator1";
-			this.toolStripSeparator1.Size = new System.Drawing.Size(117, 6);
+			this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
 			// 
 			// salirToolStripMenuItem
 			// 
 			this.salirToolStripMenuItem.Image = global::Derecho.Recursos.Salir;
 			this.salirToolStripMenuItem.Name = "salirToolStripMenuItem";
-			this.salirToolStripMenuItem.Size = new System.Drawing.Size(120, 22);
+			this.salirToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
 			this.salirToolStripMenuItem.Text = "Salir";
 			// 
 			// xToolStripMenuItem
@@ -191,6 +245,7 @@
 			this.MainMenuStrip = this.menuStrip1;
 			this.Name = "FrmMain";
 			this.Text = "Derecho";
+			this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
 			this.toolStripContainer1.BottomToolStripPanel.ResumeLayout(false);
 			this.toolStripContainer1.BottomToolStripPanel.PerformLayout();
 			this.toolStripContainer1.ContentPanel.ResumeLayout(false);
@@ -222,6 +277,11 @@
 		private System.Windows.Forms.ToolStripMenuItem salirToolStripMenuItem;
 		private System.Windows.Forms.ImageList imgList;
 		private System.Windows.Forms.ToolStripMenuItem xToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem dLLToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem exportarToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem archivosToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem portapapelesToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem archivoActualToolStripMenuItem;
 	}
 }
 
