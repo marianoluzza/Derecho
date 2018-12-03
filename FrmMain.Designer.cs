@@ -42,6 +42,7 @@
 			this.erwinXMLToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
 			this.salirToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.xToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripContainer1.BottomToolStripPanel.SuspendLayout();
 			this.toolStripContainer1.ContentPanel.SuspendLayout();
 			this.toolStripContainer1.TopToolStripPanel.SuspendLayout();
@@ -102,11 +103,11 @@
 			// 
 			// tpMain
 			// 
-			this.tpMain.ImageKey = "Codigo.png";
-			this.tpMain.Location = new System.Drawing.Point(4, 23);
+			this.tpMain.ImageKey = "Codigo";
+			this.tpMain.Location = new System.Drawing.Point(4, 39);
 			this.tpMain.Name = "tpMain";
 			this.tpMain.Padding = new System.Windows.Forms.Padding(3);
-			this.tpMain.Size = new System.Drawing.Size(792, 377);
+			this.tpMain.Size = new System.Drawing.Size(792, 361);
 			this.tpMain.TabIndex = 0;
 			this.tpMain.Text = "Principal";
 			this.tpMain.UseVisualStyleBackColor = true;
@@ -115,16 +116,18 @@
 			// 
 			this.imgList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imgList.ImageStream")));
 			this.imgList.TransparentColor = System.Drawing.Color.Transparent;
-			this.imgList.Images.SetKeyName(0, "Codigo.png");
-			this.imgList.Images.SetKeyName(1, "Exportar.png");
-			this.imgList.Images.SetKeyName(2, "Importar.png");
-			this.imgList.Images.SetKeyName(3, "Salir.png");
+			this.imgList.Images.SetKeyName(0, "Codigo");
+			this.imgList.Images.SetKeyName(1, "Exportar");
+			this.imgList.Images.SetKeyName(2, "Importar");
+			this.imgList.Images.SetKeyName(3, "Salir");
+			this.imgList.Images.SetKeyName(4, "CSharp");
 			// 
 			// menuStrip1
 			// 
 			this.menuStrip1.Dock = System.Windows.Forms.DockStyle.None;
 			this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.archivoToolStripMenuItem});
+            this.archivoToolStripMenuItem,
+            this.xToolStripMenuItem});
 			this.menuStrip1.Location = new System.Drawing.Point(0, 0);
 			this.menuStrip1.Name = "menuStrip1";
 			this.menuStrip1.Size = new System.Drawing.Size(800, 24);
@@ -147,28 +150,36 @@
             this.erwinXMLToolStripMenuItem});
 			this.importarToolStripMenuItem.Image = global::Derecho.Recursos.Importar;
 			this.importarToolStripMenuItem.Name = "importarToolStripMenuItem";
-			this.importarToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.importarToolStripMenuItem.Size = new System.Drawing.Size(120, 22);
 			this.importarToolStripMenuItem.Text = "Importar";
 			// 
 			// erwinXMLToolStripMenuItem
 			// 
 			this.erwinXMLToolStripMenuItem.Image = global::Derecho.Recursos.ERWin;
 			this.erwinXMLToolStripMenuItem.Name = "erwinXMLToolStripMenuItem";
-			this.erwinXMLToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.erwinXMLToolStripMenuItem.Size = new System.Drawing.Size(130, 22);
 			this.erwinXMLToolStripMenuItem.Text = "Erwin XML";
 			this.erwinXMLToolStripMenuItem.Click += new System.EventHandler(this.erwinXMLToolStripMenuItem_Click);
 			// 
 			// toolStripSeparator1
 			// 
 			this.toolStripSeparator1.Name = "toolStripSeparator1";
-			this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
+			this.toolStripSeparator1.Size = new System.Drawing.Size(117, 6);
 			// 
 			// salirToolStripMenuItem
 			// 
 			this.salirToolStripMenuItem.Image = global::Derecho.Recursos.Salir;
 			this.salirToolStripMenuItem.Name = "salirToolStripMenuItem";
-			this.salirToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.salirToolStripMenuItem.Size = new System.Drawing.Size(120, 22);
 			this.salirToolStripMenuItem.Text = "Salir";
+			// 
+			// xToolStripMenuItem
+			// 
+			this.xToolStripMenuItem.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+			this.xToolStripMenuItem.Image = global::Derecho.Recursos.Cerrar;
+			this.xToolStripMenuItem.Name = "xToolStripMenuItem";
+			this.xToolStripMenuItem.Size = new System.Drawing.Size(28, 20);
+			this.xToolStripMenuItem.Click += new System.EventHandler(this.xToolStripMenuItem_Click);
 			// 
 			// FrmMain
 			// 
@@ -210,6 +221,7 @@
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
 		private System.Windows.Forms.ToolStripMenuItem salirToolStripMenuItem;
 		private System.Windows.Forms.ImageList imgList;
+		private System.Windows.Forms.ToolStripMenuItem xToolStripMenuItem;
 	}
 }
 

@@ -52,6 +52,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Editor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Editor.Designer.cs">
+      <DependentUpon>Editor.cs</DependentUpon>
+    </Compile>
     <Compile Include="FrmMain.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -68,6 +74,10 @@
       <DependentUpon>Recursos.resx</DependentUpon>
     </Compile>
     <Compile Include="Transformadores\ERWinHelper.cs" />
+    <Compile Include="Transformadores\XmlHelper.cs" />
+    <EmbeddedResource Include="Editor.resx">
+      <DependentUpon>Editor.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FrmMain.resx">
       <DependentUpon>FrmMain.cs</DependentUpon>
     </EmbeddedResource>
@@ -106,6 +116,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Codigo.ico" />
+    <None Include="Recursos\Cerrar.png" />
+    <None Include="Recursos\CSharp.png" />
     <None Include="Recursos\ERWin.png" />
     <None Include="Recursos\Salir.png" />
     <None Include="Recursos\Importar.png" />

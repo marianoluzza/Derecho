@@ -63,6 +63,16 @@ namespace Derecho {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Cerrar {
+            get {
+                object obj = ResourceManager.GetObject("Cerrar", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Codigo {
             get {
                 object obj = ResourceManager.GetObject("Codigo", resourceCulture);
@@ -77,6 +87,16 @@ namespace Derecho {
             get {
                 object obj = ResourceManager.GetObject("CodigoICO", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap CSharp {
+            get {
+                object obj = ResourceManager.GetObject("CSharp", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
