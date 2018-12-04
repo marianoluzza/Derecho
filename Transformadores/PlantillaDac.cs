@@ -158,7 +158,7 @@ namespace Derecho.Transformadores
             Ex = new List<Exception>();
             List<{{ENT_CLASS_NAME}}> obj = new List<{{ENT_CLASS_NAME}}>();
 
-            OracleParameter[] oParam = new OracleParameter[{{CANT_PARAMS_INSERT}}];
+            OracleParameter[] oParam = new OracleParameter[{{CANT_PARAMS_INSERT}}+1];
 
             DataSet ORADataSet = new DataSet();
             Data objData = new Data();
@@ -166,6 +166,9 @@ namespace Derecho.Transformadores
             try
             {
                 {{GET_METHOD_ORA_PARAMS}}
+
+				oParam[{{CANT_PARAMS_INSERT}}] = new OracleParameter(""pCursor"", OracleDbType.RefCursor);
+				oParam[{{CANT_PARAMS_INSERT}}].Direction = ParameterDirection.Output;
 
                 objData.EjecutarSP(""AGRO_REGISTRO.{{PCK_NAME}}.PR_{{BASE_NAME}}_GET"", oParam, ORADataSet);
             }
