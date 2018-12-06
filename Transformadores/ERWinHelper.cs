@@ -19,12 +19,12 @@ namespace Derecho.Transformadores
 			return doc;
 		}
 
-		public static string[] GenerarClases(IList<Entidad> entidades)
+		private static string[] GenerarClases(IList<Entidad> entidades)
 		{
 			List<string> resultado = new List<string>();
 			foreach (Entidad ent in entidades)
 			{
-				string nbreClase = Utils.CamelCase(ent.Nombre, "_");//CAMEL CASE
+				string nbreClase = Utils.CamelCase(String.IsNullOrWhiteSpace(ent.NombreClase) ? ent.NombreTabla : ent.NombreClase, "_");//CAMEL CASE
 				nbreClase = nbreClase.StartsWith("T_") ? nbreClase.Substring(2) : nbreClase;//SACAR T_
 				nbreClase += "View";
 				StringBuilder sb = new StringBuilder();
@@ -38,7 +38,8 @@ namespace Derecho.Transformadores
 					foreach (Atributo attr in ent.Atributos)
 					{
 						sb.Append(TAB, 2);
-						sb.AppendLine("public " + ConvertirTipo(attr.Tipo, attr.Nombre) + " " + Utils.CamelCase(attr.Nombre, "_") + " { get; set; }");
+						attr.TipoNet = Utils.ConvertirTipoSQL_NET(attr.TipoSQL, attr.Nombre);
+						sb.AppendLine("public " + attr.TipoNet + " " + Utils.CamelCase(attr.Nombre, "_") + " { get; set; }");
 					}
 					sb.AppendLine(TAB + "}");
 				}
@@ -60,7 +61,8 @@ namespace Derecho.Transformadores
 			{
 				Entidad entidad = new Entidad();
 				res.Add(entidad);
-				entidad.Nombre = nodoEnt.Attributes["name"].Value;
+				entidad.NombreTabla = nodoEnt.Attributes["name"].Value;
+
 				//entityprops -> orden
 				string[] orden = new string[nodoEnt["EntityProps"]["Attribute_Order_List_Array"].ChildNodes.Count];
 				SortedList<string, Atributo> key_attr = new SortedList<string, Atributo>(orden.Length);
@@ -73,7 +75,7 @@ namespace Derecho.Transformadores
 					Atributo attr = new Atributo();
 					attr.Id = nodoAttr.Attributes["id"].Value;
 					attr.Nombre = nodoAttr.Attributes["name"].Value;
-					attr.Tipo = nodoAttr["AttributeProps"]["Logical_Datatype"]?.InnerText;
+					attr.TipoSQL = nodoAttr["AttributeProps"]["Logical_Datatype"]?.InnerText;
 					key_attr.Add(attr.Id, attr);
 				}
 				foreach (string s in orden)
@@ -83,32 +85,6 @@ namespace Derecho.Transformadores
 			}
 			//
 			return res;
-		}
-
-		public static string ConvertirTipo(string tipoSQL, string nbre)
-		{
-			if (String.IsNullOrWhiteSpace(tipoSQL))
-			{
-				if (String.IsNullOrWhiteSpace(nbre))
-					return "object";
-				if (nbre.ToLower().StartsWith("id"))
-					return "int";
-				if (nbre.ToLower().StartsWith("fec"))
-					return "DateTime";
-				return "object";
-			}
-			switch (tipoSQL.ToLower())
-			{
-				case "number(1,0)":
-					return "bool";
-				case var x when x.Contains("number"):
-					return "int";
-				case var x when x.Contains("date"):
-					return "DateTime";
-				case var x when x.Contains("char"):
-					return "string";
-			}
-			return "object";
 		}
 	}
 }

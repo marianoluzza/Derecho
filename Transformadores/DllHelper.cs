@@ -73,8 +73,10 @@ namespace Derecho.Transformadores
 				string singular = "";
 				if (item.Name.Contains("Tramites"))
 					singular = item.Name.Replace("Tramites", "Tramite");
-				else if (item.Name.EndsWith("es"))
+				else if (item.Name.EndsWith("res"))
 					singular = item.Name.Remove(item.Name.Length - 2);
+				else if (item.Name.EndsWith("as") || item.Name.EndsWith("es") || item.Name.EndsWith("os"))
+					singular = item.Name.Remove(item.Name.Length - 1);
 				else if (item.Name.Contains("es_"))
 					singular = item.Name.Replace("es_", "_");
 				else if (item.Name.Contains("s_"))

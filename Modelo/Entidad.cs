@@ -8,7 +8,9 @@ namespace Derecho.Modelo
 {
 	public class Entidad
 	{
-		public string Nombre { get; set; }
+		public string NombreTabla { get; set; }
+		public string NombreClase { get; set; }
+		public string NombreNamespace { get; set; }
 		public IList<Atributo> Atributos { get; set; }
 
 		public Entidad(IList<Atributo> attrs = null)

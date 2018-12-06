@@ -23,12 +23,70 @@ namespace Derecho
 			InitializeComponent();
 		}
 
+		#region Control de Pestañas
 		private void xToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			CerrarActual();
+		}
+
+		private void cerrarActualToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			CerrarActual();
+		}
+
+		private void cerrarOtrasToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			CerrarOtras();
+		}
+
+		private void cerrarALaDerechaToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			if (TABs.SelectedIndex == TABs.TabCount - 1)
+				return;
+			CerrarDdeHta(TABs.SelectedIndex + 1, TABs.TabCount - 1);
+		}
+
+		private void cerrarALaIzquierdaToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			if (TABs.SelectedIndex == 1)
+				return;
+			CerrarDdeHta(1, TABs.SelectedIndex - 1);
+		}
+
+		private void cerrarTodasToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			CerrarDdeHta(1, TABs.TabCount - 1);
+		}
+
+		private void CerrarActual()
 		{
 			if (TABs.SelectedIndex == 0)
 				Close();
 			else
 				TABs.TabPages.RemoveAt(TABs.SelectedIndex);
+		}
+
+		private void CerrarOtras()
+		{
+			for (int i = 1; i < TABs.TabCount;)
+			{
+				if (TABs.SelectedIndex == i)
+				{
+					i++;//salteo la actual
+					continue;
+				}
+				else
+					TABs.TabPages.RemoveAt(i);
+			}
+		}
+
+		private void CerrarDdeHta(int dde, int htaInclusive)
+		{
+			//int ct = htaInclusive - 
+			for (int i = dde; i <= htaInclusive && i < TABs.TabCount; i++)
+			{
+				TABs.TabPages.RemoveAt(i);
+			}
 		}
 
 		public void NuevaTab(Control ctrl, string titulo, string key = null, string keyImage = "Codigo")
@@ -56,6 +114,7 @@ namespace Derecho
 			if (tp != null)
 				TABs.SelectedTab = tp;
 		}
+		#endregion
 
 		private void erwinXMLToolStripMenuItem_Click(object sender, EventArgs e)
 		{
@@ -69,6 +128,22 @@ namespace Derecho
 			try
 			{
 				entidades = ERWinHelper.ConvertirXml(open.FileName);
+				foreach (Entidad ent in entidades)
+				{
+					string nbreClase = ent.NombreTabla;
+					nbreClase = nbreClase.StartsWith(tbClsStartRm.Text) ? nbreClase.Substring(tbClsStartRm.Text.Length) : nbreClase;//posible T_*****
+					nbreClase += tbClsStartAdd.Text.Trim();//posible Clase+FIN
+					if (chbCamelCaseClase.Checked)
+						nbreClase = Utils.CamelCase(nbreClase, tbCamelCaseSepActCls.Text, tbCamelCaseSepNvoCls.Text);//CAMEL CASE
+					ent.NombreClase = nbreClase;
+					foreach (Atributo attr in ent.Atributos)
+					{
+						string t = Utils.ConvertirTipoSQL_NET(attr.TipoSQL, attr.Nombre);
+						if (chbCamelCaseClase.Checked)
+							t = Utils.CamelCase(t, tbCamelCaseSepActCls.Text, tbCamelCaseSepNvoCls.Text);
+						attr.TipoNet = t;
+					}
+				}
 				statMensaje.Text = "XML de ERWin leído!";
 			}
 			catch (Exception ex)
@@ -79,10 +154,15 @@ namespace Derecho
 			}
 			try
 			{
-				var codigo = ERWinHelper.GenerarClases(entidades);
+				//var codigo = ERWinHelper.GenerarClases(entidades);
+				string[] ns = { "System", "System.Linq" };
+				var codigo = Utils.GenerarClases(entidades, ns);
 				for (int i = 0; i < entidades.Count; i++)
 				{
-					NuevaTab(new Editor() { Text = codigo[i] }, entidades[i].Nombre + ".cs", entidades[i].Nombre + ".cs", "CSharp");
+					Entidad ent = entidades[i];
+					var nbreArchivo = String.IsNullOrWhiteSpace(ent.NombreClase) ? ent.NombreTabla : ent.NombreClase;
+					nbreArchivo += ".cs";
+					NuevaTab(new Editor() { Text = codigo[i] }, nbreArchivo, nbreArchivo, "CSharp");
 				}
 			}
 			catch (Exception ex)
@@ -196,7 +276,7 @@ namespace Derecho
 
 		private void portapapelesToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			
+
 			TabPage tp = TABs.SelectedTab;
 			if (tp.Controls.Count > 0 && tp.Controls[0] is Editor)
 			{
@@ -205,6 +285,11 @@ namespace Derecho
 			}
 			else
 				MessageBox.Show("No se encontró un editor de texto", "Copiar a Portapapeles", MessageBoxButtons.OK, MessageBoxIcon.Error);
+		}
+
+		private void pLSQLToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+
 		}
 	}
 }

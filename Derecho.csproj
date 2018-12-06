@@ -90,6 +90,7 @@
     <Compile Include="Transformadores\Plantilla.cs" />
     <Compile Include="Transformadores\PlantillaDac.cs" />
     <Compile Include="Transformadores\PlantillaPackage.cs" />
+    <Compile Include="Transformadores\SQLHelper.cs" />
     <Compile Include="Transformadores\Utils.cs" />
     <Compile Include="Transformadores\XmlHelper.cs" />
     <EmbeddedResource Include="Editor.resx">
