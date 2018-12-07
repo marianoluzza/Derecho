@@ -36,6 +36,10 @@
 			this.TABs = new System.Windows.Forms.TabControl();
 			this.tpMain = new System.Windows.Forms.TabPage();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.tbUsings = new System.Windows.Forms.TextBox();
+			this.label7 = new System.Windows.Forms.Label();
+			this.tbNameSpace = new System.Windows.Forms.TextBox();
+			this.label6 = new System.Windows.Forms.Label();
 			this.radIdentidad = new System.Windows.Forms.RadioButton();
 			this.radSingular = new System.Windows.Forms.RadioButton();
 			this.radPlural = new System.Windows.Forms.RadioButton();
@@ -73,10 +77,6 @@
 			this.cerrarTodasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripCBTabs = new System.Windows.Forms.ToolStripComboBox();
-			this.tbNameSpace = new System.Windows.Forms.TextBox();
-			this.label6 = new System.Windows.Forms.Label();
-			this.tbUsings = new System.Windows.Forms.TextBox();
-			this.label7 = new System.Windows.Forms.Label();
 			this.toolStripContainer1.BottomToolStripPanel.SuspendLayout();
 			this.toolStripContainer1.ContentPanel.SuspendLayout();
 			this.toolStripContainer1.TopToolStripPanel.SuspendLayout();
@@ -177,6 +177,42 @@
 			this.groupBox1.TabIndex = 0;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Convención de Nombres para Transformaciones";
+			// 
+			// tbUsings
+			// 
+			this.tbUsings.Location = new System.Drawing.Point(6, 241);
+			this.tbUsings.Multiline = true;
+			this.tbUsings.Name = "tbUsings";
+			this.tbUsings.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+			this.tbUsings.Size = new System.Drawing.Size(264, 105);
+			this.tbUsings.TabIndex = 15;
+			this.tbUsings.Text = "using System;\r\nusing System.Collections.Generic;\r\nusing System.Linq;";
+			// 
+			// label7
+			// 
+			this.label7.AutoSize = true;
+			this.label7.Location = new System.Drawing.Point(6, 225);
+			this.label7.Name = "label7";
+			this.label7.Size = new System.Drawing.Size(39, 13);
+			this.label7.TabIndex = 14;
+			this.label7.Text = "Usings";
+			// 
+			// tbNameSpace
+			// 
+			this.tbNameSpace.Location = new System.Drawing.Point(6, 202);
+			this.tbNameSpace.Name = "tbNameSpace";
+			this.tbNameSpace.Size = new System.Drawing.Size(122, 20);
+			this.tbNameSpace.TabIndex = 13;
+			this.tbNameSpace.Text = "Test";
+			// 
+			// label6
+			// 
+			this.label6.AutoSize = true;
+			this.label6.Location = new System.Drawing.Point(6, 186);
+			this.label6.Name = "label6";
+			this.label6.Size = new System.Drawing.Size(105, 13);
+			this.label6.TabIndex = 12;
+			this.label6.Text = "Espacio de Nombres";
 			// 
 			// radIdentidad
 			// 
@@ -377,6 +413,7 @@
 			// 
 			// pLSQLToolStripMenuItem
 			// 
+			this.pLSQLToolStripMenuItem.Image = global::Derecho.Recursos.SQL;
 			this.pLSQLToolStripMenuItem.Name = "pLSQLToolStripMenuItem";
 			this.pLSQLToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
 			this.pLSQLToolStripMenuItem.Text = "PL-SQL";
@@ -499,42 +536,8 @@
 			this.toolStripCBTabs.MaxDropDownItems = 12;
 			this.toolStripCBTabs.Name = "toolStripCBTabs";
 			this.toolStripCBTabs.Size = new System.Drawing.Size(121, 23);
+			this.toolStripCBTabs.DropDown += new System.EventHandler(this.AdjustWidthComboBox_DropDown);
 			this.toolStripCBTabs.SelectedIndexChanged += new System.EventHandler(this.toolStripCBTabs_SelectedIndexChanged);
-			// 
-			// tbNameSpace
-			// 
-			this.tbNameSpace.Location = new System.Drawing.Point(6, 202);
-			this.tbNameSpace.Name = "tbNameSpace";
-			this.tbNameSpace.Size = new System.Drawing.Size(122, 20);
-			this.tbNameSpace.TabIndex = 13;
-			// 
-			// label6
-			// 
-			this.label6.AutoSize = true;
-			this.label6.Location = new System.Drawing.Point(6, 186);
-			this.label6.Name = "label6";
-			this.label6.Size = new System.Drawing.Size(105, 13);
-			this.label6.TabIndex = 12;
-			this.label6.Text = "Espacio de Nombres";
-			// 
-			// tbUsings
-			// 
-			this.tbUsings.Location = new System.Drawing.Point(6, 241);
-			this.tbUsings.Multiline = true;
-			this.tbUsings.Name = "tbUsings";
-			this.tbUsings.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.tbUsings.Size = new System.Drawing.Size(264, 105);
-			this.tbUsings.TabIndex = 15;
-			this.tbUsings.Text = "using System;\r\nusing System.Collections.Generic;\r\nusing System.Linq;";
-			// 
-			// label7
-			// 
-			this.label7.AutoSize = true;
-			this.label7.Location = new System.Drawing.Point(6, 225);
-			this.label7.Name = "label7";
-			this.label7.Size = new System.Drawing.Size(39, 13);
-			this.label7.TabIndex = 14;
-			this.label7.Text = "Usings";
 			// 
 			// FrmMain
 			// 

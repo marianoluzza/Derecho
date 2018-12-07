@@ -137,6 +137,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Codigo.ico" />
+    <None Include="Recursos\SQL.png" />
+    <None Include="Recursos\PLSQL.png" />
     <None Include="Recursos\Archivo.png" />
     <None Include="Recursos\Archivos.png" />
     <None Include="Recursos\Clipboard.png" />

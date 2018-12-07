@@ -44,7 +44,7 @@ namespace Derecho.Transformadores
 			return ns_tipos;
 		}
 
-		public static void GenerarPlantillas(IEnumerable<Type> lstTipos, out string [] plantillasPCK, out string[] plantillasDAC, string nameSpace, string usings)
+		public static void GenerarPlantillas(IEnumerable<Type> lstTipos, out string[] plantillasPCK, out string[] plantillasDAC, string nameSpace, string usings)
 		{
 			List<Tabla> tablas = new List<Tabla>();
 			/*var consulta = AppDomain.CurrentDomain.GetAssemblies()
@@ -89,22 +89,24 @@ namespace Derecho.Transformadores
 
 				foreach (var p in item.GetProperties())
 				{
-
-					switch (p.PropertyType.Name)
+					string tipoProp = p.PropertyType.Name;
+					if (p.PropertyType.IsGenericType && p.PropertyType.GetGenericTypeDefinition() == typeof(Nullable<>))
+						tipoProp = Nullable.GetUnderlyingType(p.PropertyType).Name;
+					switch (tipoProp.ToLower())
 					{
-						case "DateTime":
+						case "datetime":
 							paramTypeName = "DATE";
 							propAdoDbType = "Date";
 							break;
-						case "Boolean":
+						case "boolean":
 							paramTypeName = "NUMBER";
 							propAdoDbType = "Int32";
 							break;
-						case "Int32":
+						case "int32":
 							paramTypeName = "NUMBER";
 							propAdoDbType = "Int32";
 							break;
-						case "String":
+						case "string":
 							paramTypeName = "VARCHAR2";
 							propAdoDbType = "NVarchar2";
 							break;
@@ -132,8 +134,10 @@ namespace Derecho.Transformadores
 						mapeo.Add(propName, paramName);
 						mapeoType.Add(paramName, paramTypeName);
 						adoDbType.Add(paramName, propAdoDbType);
-						netType.Add(paramName, p.PropertyType.Name);
-
+						if (p.PropertyType.IsGenericType && p.PropertyType.GetGenericTypeDefinition() == typeof(Nullable<>))
+							netType.Add(paramName, Nullable.GetUnderlyingType(p.PropertyType).Name);
+						else
+							netType.Add(paramName, p.PropertyType.Name);
 					}
 				}
 				tablas.Add(new Tabla

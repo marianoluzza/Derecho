@@ -45,16 +45,24 @@ namespace Derecho.Transformadores
             string parametrosSinPk = this.GetParamList(tabla, false, true); //no me los devuelve con su tipo, hay que hacer que devuelva la lista con el tipo de dato de la base
             p = p.Replace("{{PARAM_LIST}}", parametrosSinPk);
 
-            //lista de params con tipo 
-            string parametrosWT = this.GetParamList(tabla, true, true);
+			//obtengo lista de parametros SIN la pk y SIN tipos para el VALUES
+			string parametrosSinPkSinTipos = this.GetParamList(tabla, false, false); 
+			p = p.Replace("{{PARAM_LIST_SINTIPOS}}", parametrosSinPkSinTipos);
+
+			//lista de params con tipo 
+			string parametrosWT = this.GetParamList(tabla, true, true);
             p = p.Replace("{{PARAM_LIST_WPKT}}", parametrosWT);
 
             //obtengo la lista de atributos con la PK
             string attribs = this.GetAttrList(tabla, true);
             p = p.Replace("{{ATTR_LIST_WPK}}", attribs);
 
-            //obtengo la lista de asignación para la sentencia UPDATE
-            string updateList = this.GetUpdateList(tabla, true);
+			//obtengo la lista de asignación para la sentencia UPDATE
+			string updateListSinPK = this.GetUpdateList(tabla, false);
+			p = p.Replace("{{UPDATE_LIST}}", updateListSinPK);
+
+			//obtengo la lista de asignación para la sentencia UPDATE
+			string updateList = this.GetUpdateList(tabla, true);
             p = p.Replace("{{UPDATE_LIST_WPK}}", updateList);
 
 
@@ -96,6 +104,9 @@ namespace Derecho.Transformadores
                         {{PK_PARAM_NAME}} IN {{PK_PARAM_TYPE}}
                     );
                 END;
+/*************************** SEPARADOR GO ********************************************************/
+
+GO
 
                 /* --------------------------------> BODY <---------------------------------- */
                 CREATE OR REPLACE PACKAGE BODY ""AGRO_REGISTRO"".""{{PCK_NAME}}"" AS
@@ -128,7 +139,7 @@ namespace Derecho.Transformadores
                             pNextId NUMBER;
                     BEGIN
                         SELECT SEQ_{{BASE_NAME}}.NEXTVAL INTO pNextId FROM DUAL;
-                        INSERT INTO {{TABLE_NAME}} ( {{ATTR_LIST_WPK}} ) VALUES( {{PARAM_LIST_WPK}} );
+                        INSERT INTO {{TABLE_NAME}} ( {{ATTR_LIST_WPK}} ) VALUES( pNextId, {{PARAM_LIST_SINTIPOS}} );
                         {{PK_PARAM_NAME}} := pNextId;
                             
                     END PR_{{BASE_NAME}}_INSERT;
@@ -140,7 +151,7 @@ namespace Derecho.Transformadores
                         ) IS
                     BEGIN
                         UPDATE {{TABLE_NAME}} SET
-                            {{UPDATE_LIST_WPK}}
+                            {{UPDATE_LIST}}
                          WHERE
                             {{PK_ATTR_NAME}} = {{PK_PARAM_NAME}};
 

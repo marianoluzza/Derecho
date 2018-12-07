@@ -136,10 +136,10 @@ namespace Derecho
 
 		private void CerrarDdeHta(int dde, int htaInclusive)
 		{
-			//int ct = htaInclusive - 
-			for (int i = dde; i <= htaInclusive && i < TABs.TabCount; i++)
+			int ct = htaInclusive - dde + 1;
+			for (int i = ct; i > 0 && dde < TABs.TabCount; i--)
 			{
-				TABs.TabPages.RemoveAt(i);
+				TABs.TabPages.RemoveAt(dde);
 			}
 		}
 
@@ -168,8 +168,32 @@ namespace Derecho
 			if (tp != null)
 				TABs.SelectedTab = tp;
 		}
+
+		private void AdjustWidthComboBox_DropDown(object sender, System.EventArgs e)
+		{
+			ToolStripComboBox senderComboBox = (ToolStripComboBox)sender;
+			int width = senderComboBox.DropDownWidth;
+			Graphics g = CreateGraphics();
+			Font font = senderComboBox.Font;
+			int vertScrollBarWidth =
+				(senderComboBox.Items.Count > senderComboBox.MaxDropDownItems)
+				? SystemInformation.VerticalScrollBarWidth : 0;
+
+			int newWidth;
+			foreach (string s in senderComboBox.Items)
+			{
+				newWidth = (int)g.MeasureString(s, font).Width
+					+ vertScrollBarWidth;
+				if (width < newWidth)
+				{
+					width = newWidth;
+				}
+			}
+			senderComboBox.DropDownWidth = width;
+		}
 		#endregion
 
+		#region Importar
 		private void erwinXMLToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			OpenFileDialog open = new OpenFileDialog();
@@ -232,8 +256,6 @@ namespace Derecho
 			}
 		}
 
-
-
 		private void dllToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			OpenFileDialog open = new OpenFileDialog();
@@ -269,6 +291,7 @@ namespace Derecho
 						NuevaTab(new Editor() { Text = plantillasPCK[i] }, t.Namespace + "." + t.Name + ".sql", t.Namespace + "." + t.Name + ".sql", "Oracle");
 						i++;
 					}
+					NuevaTab(new Editor() { Text = String.Join(Environment.NewLine + "GO" + Environment.NewLine, plantillasPCK) }, tbNameSpace.Text + "._All Packages.sql", tbNameSpace.Text + "._All Packages.sql.sql", "Oracle");
 					statMensaje.Text = "Clases y scripts generados!";
 					return null;
 
@@ -285,65 +308,6 @@ namespace Derecho
 				MessageBox.Show(ex.Message, "Error al Crear Código C#", MessageBoxButtons.OK, MessageBoxIcon.Error);
 				return;
 			}
-		}
-
-		private void archivosToolStripMenuItem_Click(object sender, EventArgs e)
-		{
-			VistaFolderBrowserDialog browserDialog = new VistaFolderBrowserDialog();
-			browserDialog.Description = "Seleccione carpeta para los archivos";
-			if (browserDialog.ShowDialog() != DialogResult.OK)
-				return;
-			int i = 0;
-			foreach (TabPage tp in TABs.TabPages)
-			{
-				if (tp.Controls.Count > 0 && tp.Controls[0] is Editor)
-				{
-					File.WriteAllText(Path.Combine(browserDialog.SelectedPath, tp.Text), (tp.Controls[0] as Editor).Text);
-					i++;
-				}
-			}
-			switch (i)
-			{
-				case 0:
-					MessageBox.Show("No se escribió ningún archivo", "Exportación a Archivos", MessageBoxButtons.OK, MessageBoxIcon.Information);
-					break;
-				case 1:
-					MessageBox.Show("Se escribió un archivo", "Exportación a Archivos", MessageBoxButtons.OK, MessageBoxIcon.Information);
-					break;
-				default:
-					MessageBox.Show("Se escribieron " + i.ToString() + " archivos", "Exportación a Archivos", MessageBoxButtons.OK, MessageBoxIcon.Information);
-					break;
-			}
-		}
-
-		private void archivoActualToolStripMenuItem_Click(object sender, EventArgs e)
-		{
-			TabPage tp = TABs.SelectedTab;
-			if (tp.Controls.Count > 0 && tp.Controls[0] is Editor)
-			{
-				SaveFileDialog save = new SaveFileDialog();
-				string file = tp.Text;
-				save.FileName = file;
-				if (save.ShowDialog() != DialogResult.OK)
-					return;
-				File.WriteAllText(save.FileName, (tp.Controls[0] as Editor).Text);
-				statMensaje.Text = save.FileName + " generado exitósamente!";
-			}
-			else
-				MessageBox.Show("No se encontró un editor de texto", "Exportación a Archivo", MessageBoxButtons.OK, MessageBoxIcon.Error);
-		}
-
-		private void portapapelesToolStripMenuItem_Click(object sender, EventArgs e)
-		{
-
-			TabPage tp = TABs.SelectedTab;
-			if (tp.Controls.Count > 0 && tp.Controls[0] is Editor)
-			{
-				Clipboard.SetText((tp.Controls[0] as Editor).Text);
-				statMensaje.Text = "Texto copiado al portapapeles!";
-			}
-			else
-				MessageBox.Show("No se encontró un editor de texto", "Copiar a Portapapeles", MessageBoxButtons.OK, MessageBoxIcon.Error);
 		}
 
 		private void pLSQLToolStripMenuItem_Click(object sender, EventArgs e)
@@ -406,5 +370,67 @@ namespace Derecho
 				return;
 			}
 		}
+		#endregion Importar
+
+		#region Exportar
+		private void archivosToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			VistaFolderBrowserDialog browserDialog = new VistaFolderBrowserDialog();
+			browserDialog.Description = "Seleccione carpeta para los archivos";
+			if (browserDialog.ShowDialog() != DialogResult.OK)
+				return;
+			int i = 0;
+			foreach (TabPage tp in TABs.TabPages)
+			{
+				if (tp.Controls.Count > 0 && tp.Controls[0] is Editor)
+				{
+					File.WriteAllText(Path.Combine(browserDialog.SelectedPath, tp.Text), (tp.Controls[0] as Editor).Text);
+					i++;
+				}
+			}
+			switch (i)
+			{
+				case 0:
+					MessageBox.Show("No se escribió ningún archivo", "Exportación a Archivos", MessageBoxButtons.OK, MessageBoxIcon.Information);
+					break;
+				case 1:
+					MessageBox.Show("Se escribió un archivo", "Exportación a Archivos", MessageBoxButtons.OK, MessageBoxIcon.Information);
+					break;
+				default:
+					MessageBox.Show("Se escribieron " + i.ToString() + " archivos", "Exportación a Archivos", MessageBoxButtons.OK, MessageBoxIcon.Information);
+					break;
+			}
+		}
+
+		private void archivoActualToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			TabPage tp = TABs.SelectedTab;
+			if (tp.Controls.Count > 0 && tp.Controls[0] is Editor)
+			{
+				SaveFileDialog save = new SaveFileDialog();
+				string file = tp.Text;
+				save.FileName = file;
+				if (save.ShowDialog() != DialogResult.OK)
+					return;
+				File.WriteAllText(save.FileName, (tp.Controls[0] as Editor).Text);
+				statMensaje.Text = save.FileName + " generado exitósamente!";
+			}
+			else
+				MessageBox.Show("No se encontró un editor de texto", "Exportación a Archivo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+		}
+
+		private void portapapelesToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+
+			TabPage tp = TABs.SelectedTab;
+			if (tp.Controls.Count > 0 && tp.Controls[0] is Editor)
+			{
+				Clipboard.SetText((tp.Controls[0] as Editor).Text);
+				statMensaje.Text = "Texto copiado al portapapeles!";
+			}
+			else
+				MessageBox.Show("No se encontró un editor de texto", "Copiar a Portapapeles", MessageBoxButtons.OK, MessageBoxIcon.Error);
+		}
+		#endregion Exportar
 	}
 }

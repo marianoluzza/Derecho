@@ -210,7 +210,7 @@ namespace {{NAME_SPACE}}
 		/// <returns></returns>
 		public static List<{{ENT_CLASS_NAME}}> GetAll(out List<Exception> Ex)
 		{
-		return Get({{NULL_LIST}},out Ex);
+			return Get({{NULL_LIST}},out Ex);
 		}
 
 		private static List<{{ENT_CLASS_NAME}}> Fill(DataTable tbl)
