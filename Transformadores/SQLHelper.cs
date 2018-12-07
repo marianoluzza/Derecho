@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace Derecho.Transformadores
 {
-	public class SQLHelper
+	public static class SQLHelper
 	{
-		public List<Entidad> LeerPLSQL(string path)
+		public static List<Entidad> LeerPLSQL(string path)
 		{
 			List<Entidad> entidades = new List<Entidad>();
 			bool enTabla = false;
@@ -31,7 +31,7 @@ namespace Derecho.Transformadores
 						if (index2 < 0)
 							throw new FormatException("CREATE TABLE sin comillas finales <" + x + ">");
 						entidad = new Entidad();
-						entidad.NombreTabla = x.Substring(index1, index2 - index1);
+						entidad.NombreTabla = x.Substring(index1 + 1, index2 - index1 - 1);
 						entidades.Add(entidad);
 						enTabla = true;
 						break;
@@ -46,7 +46,7 @@ namespace Derecho.Transformadores
 						if (index2 < 0)
 							throw new FormatException("Columna de tabla sin comillas finales <" + x + ">");
 						Atributo atributo = new Atributo();
-						atributo.Nombre = x.Substring(index1, index2 - index1);
+						atributo.Nombre = x.Substring(index1 + 1, index2 - index1 - 1);
 						var resto = x.Substring(index2 + 1).Trim();
 						atributo.NotNull = resto.ToLower().Contains("not null");
 						index2 = resto.IndexOf(' ');

@@ -7,12 +7,15 @@ using System.Threading.Tasks;
 
 namespace Derecho.Transformadores
 {
-    abstract class Plantilla
-    {
-        protected string pckName = "";
-        protected string baseName = "";
+	abstract class Plantilla
+	{
+		protected string pckName = "";
+		protected string baseName = "";
 
-        public abstract string Generar(Tabla tabla);
-        
-    }
+		public string NameSpace { get; set; }
+		public string Usings { get; set; }
+
+		public abstract string Generar(Tabla tabla);
+		
+	}
 }

@@ -44,7 +44,7 @@ namespace Derecho.Transformadores
 			return ns_tipos;
 		}
 
-		public static void GenerarPlantillas(IEnumerable<Type> lstTipos, out string [] plantillasPCK, out string[] plantillasDAC)
+		public static void GenerarPlantillas(IEnumerable<Type> lstTipos, out string [] plantillasPCK, out string[] plantillasDAC, string nameSpace, string usings)
 		{
 			List<Tabla> tablas = new List<Tabla>();
 			/*var consulta = AppDomain.CurrentDomain.GetAssemblies()
@@ -170,7 +170,8 @@ namespace Derecho.Transformadores
 			//generar los pkg completos
 			PlantillaPackage pPck = new PlantillaPackage();
 			PlantillaDac pDac = new PlantillaDac();
-
+			pDac.NameSpace = nameSpace;
+			pDac.Usings = usings;
 
 			List<string> lstStrPCK = new List<string>();
 			List<string> lstStrDAC = new List<string>();

@@ -10,44 +10,12 @@ namespace Derecho.Transformadores
 {
 	public class ERWinHelper
 	{
-		const char TAB = '\t';
 
 		static XmlDocument LeerXml(string pathXML)
 		{
 			XmlDocument doc = new XmlDocument();
 			doc.Load(pathXML);
 			return doc;
-		}
-
-		private static string[] GenerarClases(IList<Entidad> entidades)
-		{
-			List<string> resultado = new List<string>();
-			foreach (Entidad ent in entidades)
-			{
-				string nbreClase = Utils.CamelCase(String.IsNullOrWhiteSpace(ent.NombreClase) ? ent.NombreTabla : ent.NombreClase, "_");//CAMEL CASE
-				nbreClase = nbreClase.StartsWith("T_") ? nbreClase.Substring(2) : nbreClase;//SACAR T_
-				nbreClase += "View";
-				StringBuilder sb = new StringBuilder();
-				sb.AppendLine("using System;");
-				sb.AppendLine("");
-				sb.AppendLine("namespace Test");
-				sb.AppendLine("{");
-				{
-					sb.AppendLine(TAB + "public class " + nbreClase);
-					sb.AppendLine(TAB + "{");
-					foreach (Atributo attr in ent.Atributos)
-					{
-						sb.Append(TAB, 2);
-						attr.TipoNet = Utils.ConvertirTipoSQL_NET(attr.TipoSQL, attr.Nombre);
-						sb.AppendLine("public " + attr.TipoNet + " " + Utils.CamelCase(attr.Nombre, "_") + " { get; set; }");
-					}
-					sb.AppendLine(TAB + "}");
-				}
-				sb.AppendLine("}");
-				//System.IO.File.WriteAllText("C:\\Users\\Mariano\\Downloads\\REG\\src\\" + nbreClase + ".cs", sb.ToString());
-				resultado.Add(sb.ToString());
-			}
-			return resultado.ToArray();
 		}
 
 		public static IList<Entidad> ConvertirXml(string pathXML)

@@ -12,7 +12,7 @@ namespace Derecho.Modelo
 		public string Nombre { get; set; }
 		public string TipoSQL { get; set; }
 		public string TipoNet { get; set; }
-		public bool NotNull { get; set; }
+		public bool NotNull { get; set; } = true;
 		public object Tag { get; set; }
 		public string Descripcion { get; set; }
 	}

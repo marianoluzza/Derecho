@@ -57,7 +57,7 @@ namespace Derecho.Transformadores
 			{
 				string nbreClase = String.IsNullOrWhiteSpace(ent.NombreClase) ? ent.NombreTabla : ent.NombreClase;
 				StringBuilder sb = new StringBuilder();
-				if (usingNS != null)
+				if (usingNS != null && usingNS.Length > 0)
 				{
 					foreach (var ns in usingNS)
 					{
@@ -73,7 +73,7 @@ namespace Derecho.Transformadores
 					foreach (Atributo attr in ent.Atributos)
 					{
 						sb.Append(TAB, 2);
-						string tipo = String.IsNullOrWhiteSpace(attr.TipoNet) ? ConvertirTipoSQL_NET(attr.TipoSQL, attr.Nombre) : attr.TipoNet;
+						string tipo = String.IsNullOrWhiteSpace(attr.TipoNet) ? ConvertirTipoSQL_NET(attr.TipoSQL, !attr.NotNull, attr.Nombre) : attr.TipoNet;
 						sb.AppendLine("public " + tipo + " " + (conversorNbreAttr != null ? conversorNbreAttr(attr.Nombre) : attr.Nombre) + " { get; set; }");
 					}
 					sb.AppendLine(TAB + "}");
@@ -89,33 +89,59 @@ namespace Derecho.Transformadores
 		/// Convierte un tipo SQL a un tipo .Net
 		/// </summary>
 		/// <param name="tipoSQL"></param>
+		/// <param name="nullable">admite null?</param>
 		/// <param name="nbre">si el tipo SQL es ambiguo se usa convenciones del nombre del atributo para inferir el tipo (null => object)</param>
 		/// <returns></returns>
-		public static string ConvertirTipoSQL_NET(string tipoSQL, string nbre = null)
+		public static string ConvertirTipoSQL_NET(string tipoSQL, bool nullable = false, string nbre = null)
 		{
 			string tipoEnLower = String.IsNullOrWhiteSpace(tipoSQL) ? "" : tipoSQL.ToLower();
+			string resultado;
 			switch (tipoEnLower)
 			{
 				case "number(1,0)":
-					return "bool";
+					resultado = "bool";
+					break;
 				case var x when x.Contains("number"):
 					int indiceComa = x.IndexOf(',');
 					if (indiceComa > 0 && indiceComa + 1 < x.Length && x[indiceComa + 1] != '0')//number(X,Y) => Y > 0
-						return "decimal";
+						resultado = "decimal";
 					else
-						return "int";
+						resultado = "int";
+					break;
 				case var x when x.Contains("date") || x.Contains("time"):
-					return "DateTime";
+					resultado = "DateTime";
+					break;
 				case var x when x.Contains("char"):
 					return "string";
 				default://SIN TIPO SQL o INDEFINIDO
 					if (String.IsNullOrWhiteSpace(nbre))
 						return "object";
-					if (nbre.ToLower().StartsWith("id"))
-						return "int";
-					if (nbre.ToLower().StartsWith("fec"))
+					else if (nbre.ToLower().StartsWith("id"))
+						resultado = "int";
+					else if (nbre.ToLower().StartsWith("fec"))
 						return "DateTime";
-					return "object";
+					else
+						return "object";
+					break;
+			}
+			if (nullable)
+				return resultado + "?";
+			else
+				return resultado;
+		}
+
+		public static string Singular(string s)
+		{
+			s = s.Trim();
+			int l = s.Length;
+			switch (s.ToLower())
+			{
+				case var x when x.EndsWith("as") || x.EndsWith("es") || x.EndsWith("is") || x.EndsWith("os") || x.EndsWith("us"):
+					return s.Substring(0, l - 1);
+				case var x when x.EndsWith("yes") || x.EndsWith("des") || x.EndsWith("res") || x.EndsWith("nes") || x.EndsWith("les") || x.EndsWith("jes"):
+					return s.Substring(0, l - 2);
+				default://quita s
+					return s.Substring(0, l - 1);
 			}
 		}
 	}

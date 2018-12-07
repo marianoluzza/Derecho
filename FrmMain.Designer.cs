@@ -35,12 +35,29 @@
 			this.statMensaje = new System.Windows.Forms.ToolStripStatusLabel();
 			this.TABs = new System.Windows.Forms.TabControl();
 			this.tpMain = new System.Windows.Forms.TabPage();
+			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.radIdentidad = new System.Windows.Forms.RadioButton();
+			this.radSingular = new System.Windows.Forms.RadioButton();
+			this.radPlural = new System.Windows.Forms.RadioButton();
+			this.tbCamelCaseSepNvo = new System.Windows.Forms.TextBox();
+			this.tbCamelCaseSepAct = new System.Windows.Forms.TextBox();
+			this.label5 = new System.Windows.Forms.Label();
+			this.chbCamelCase = new System.Windows.Forms.CheckBox();
+			this.tbEndAdd = new System.Windows.Forms.TextBox();
+			this.label3 = new System.Windows.Forms.Label();
+			this.tbEndRemove = new System.Windows.Forms.TextBox();
+			this.label4 = new System.Windows.Forms.Label();
+			this.tbStartAdd = new System.Windows.Forms.TextBox();
+			this.label2 = new System.Windows.Forms.Label();
+			this.tbStartRemove = new System.Windows.Forms.TextBox();
+			this.label1 = new System.Windows.Forms.Label();
 			this.imgList = new System.Windows.Forms.ImageList(this.components);
 			this.menuStrip1 = new System.Windows.Forms.MenuStrip();
 			this.archivoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.importarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.erwinXMLToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.dLLToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.pLSQLToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.exportarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.archivoActualToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.archivosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -56,24 +73,10 @@
 			this.cerrarTodasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripCBTabs = new System.Windows.Forms.ToolStripComboBox();
-			this.pLSQLToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.groupBox1 = new System.Windows.Forms.GroupBox();
-			this.label1 = new System.Windows.Forms.Label();
-			this.tbClsStartRm = new System.Windows.Forms.TextBox();
-			this.tbClsStartAdd = new System.Windows.Forms.TextBox();
-			this.label2 = new System.Windows.Forms.Label();
-			this.tbTblStartAdd = new System.Windows.Forms.TextBox();
-			this.label3 = new System.Windows.Forms.Label();
-			this.tbTblStartRm = new System.Windows.Forms.TextBox();
-			this.label4 = new System.Windows.Forms.Label();
-			this.chbCamelCaseTabla = new System.Windows.Forms.CheckBox();
-			this.tbCamelCaseSepActTbl = new System.Windows.Forms.TextBox();
-			this.label5 = new System.Windows.Forms.Label();
-			this.tbCamelCaseSepNvoTbl = new System.Windows.Forms.TextBox();
-			this.tbCamelCaseSepNvoCls = new System.Windows.Forms.TextBox();
-			this.tbCamelCaseSepActCls = new System.Windows.Forms.TextBox();
+			this.tbNameSpace = new System.Windows.Forms.TextBox();
 			this.label6 = new System.Windows.Forms.Label();
-			this.chbCamelCaseClase = new System.Windows.Forms.CheckBox();
+			this.tbUsings = new System.Windows.Forms.TextBox();
+			this.label7 = new System.Windows.Forms.Label();
 			this.toolStripContainer1.BottomToolStripPanel.SuspendLayout();
 			this.toolStripContainer1.ContentPanel.SuspendLayout();
 			this.toolStripContainer1.TopToolStripPanel.SuspendLayout();
@@ -81,8 +84,8 @@
 			this.statBarra.SuspendLayout();
 			this.TABs.SuspendLayout();
 			this.tpMain.SuspendLayout();
-			this.menuStrip1.SuspendLayout();
 			this.groupBox1.SuspendLayout();
+			this.menuStrip1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// toolStripContainer1
@@ -133,6 +136,7 @@
 			this.TABs.SelectedIndex = 0;
 			this.TABs.Size = new System.Drawing.Size(800, 404);
 			this.TABs.TabIndex = 0;
+			this.TABs.SelectedIndexChanged += new System.EventHandler(this.toolStripCBTabs_SelectedIndexChanged);
 			// 
 			// tpMain
 			// 
@@ -145,6 +149,168 @@
 			this.tpMain.TabIndex = 0;
 			this.tpMain.Text = "Principal";
 			this.tpMain.UseVisualStyleBackColor = true;
+			// 
+			// groupBox1
+			// 
+			this.groupBox1.Controls.Add(this.tbUsings);
+			this.groupBox1.Controls.Add(this.label7);
+			this.groupBox1.Controls.Add(this.tbNameSpace);
+			this.groupBox1.Controls.Add(this.label6);
+			this.groupBox1.Controls.Add(this.radIdentidad);
+			this.groupBox1.Controls.Add(this.radSingular);
+			this.groupBox1.Controls.Add(this.radPlural);
+			this.groupBox1.Controls.Add(this.tbCamelCaseSepNvo);
+			this.groupBox1.Controls.Add(this.tbCamelCaseSepAct);
+			this.groupBox1.Controls.Add(this.label5);
+			this.groupBox1.Controls.Add(this.chbCamelCase);
+			this.groupBox1.Controls.Add(this.tbEndAdd);
+			this.groupBox1.Controls.Add(this.label3);
+			this.groupBox1.Controls.Add(this.tbEndRemove);
+			this.groupBox1.Controls.Add(this.label4);
+			this.groupBox1.Controls.Add(this.tbStartAdd);
+			this.groupBox1.Controls.Add(this.label2);
+			this.groupBox1.Controls.Add(this.tbStartRemove);
+			this.groupBox1.Controls.Add(this.label1);
+			this.groupBox1.Location = new System.Drawing.Point(8, 6);
+			this.groupBox1.Name = "groupBox1";
+			this.groupBox1.Size = new System.Drawing.Size(287, 349);
+			this.groupBox1.TabIndex = 0;
+			this.groupBox1.TabStop = false;
+			this.groupBox1.Text = "Convención de Nombres para Transformaciones";
+			// 
+			// radIdentidad
+			// 
+			this.radIdentidad.AutoSize = true;
+			this.radIdentidad.Checked = true;
+			this.radIdentidad.Location = new System.Drawing.Point(148, 158);
+			this.radIdentidad.Name = "radIdentidad";
+			this.radIdentidad.Size = new System.Drawing.Size(69, 17);
+			this.radIdentidad.TabIndex = 1;
+			this.radIdentidad.TabStop = true;
+			this.radIdentidad.Text = "Identidad";
+			this.radIdentidad.UseVisualStyleBackColor = true;
+			// 
+			// radSingular
+			// 
+			this.radSingular.AutoSize = true;
+			this.radSingular.Location = new System.Drawing.Point(65, 157);
+			this.radSingular.Name = "radSingular";
+			this.radSingular.Size = new System.Drawing.Size(63, 17);
+			this.radSingular.TabIndex = 1;
+			this.radSingular.Text = "Singular";
+			this.radSingular.UseVisualStyleBackColor = true;
+			// 
+			// radPlural
+			// 
+			this.radPlural.AutoSize = true;
+			this.radPlural.Location = new System.Drawing.Point(6, 157);
+			this.radPlural.Name = "radPlural";
+			this.radPlural.Size = new System.Drawing.Size(51, 17);
+			this.radPlural.TabIndex = 1;
+			this.radPlural.Text = "Plural";
+			this.radPlural.UseVisualStyleBackColor = true;
+			// 
+			// tbCamelCaseSepNvo
+			// 
+			this.tbCamelCaseSepNvo.Location = new System.Drawing.Point(228, 132);
+			this.tbCamelCaseSepNvo.Name = "tbCamelCaseSepNvo";
+			this.tbCamelCaseSepNvo.Size = new System.Drawing.Size(42, 20);
+			this.tbCamelCaseSepNvo.TabIndex = 11;
+			// 
+			// tbCamelCaseSepAct
+			// 
+			this.tbCamelCaseSepAct.Location = new System.Drawing.Point(148, 132);
+			this.tbCamelCaseSepAct.Name = "tbCamelCaseSepAct";
+			this.tbCamelCaseSepAct.Size = new System.Drawing.Size(42, 20);
+			this.tbCamelCaseSepAct.TabIndex = 10;
+			this.tbCamelCaseSepAct.Text = "_";
+			// 
+			// label5
+			// 
+			this.label5.AutoSize = true;
+			this.label5.Location = new System.Drawing.Point(148, 116);
+			this.label5.Name = "label5";
+			this.label5.Size = new System.Drawing.Size(132, 13);
+			this.label5.TabIndex = 9;
+			this.label5.Text = "Separador Actual / Nuevo";
+			// 
+			// chbCamelCase
+			// 
+			this.chbCamelCase.AutoSize = true;
+			this.chbCamelCase.Checked = true;
+			this.chbCamelCase.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.chbCamelCase.Location = new System.Drawing.Point(6, 134);
+			this.chbCamelCase.Name = "chbCamelCase";
+			this.chbCamelCase.Size = new System.Drawing.Size(85, 17);
+			this.chbCamelCase.TabIndex = 8;
+			this.chbCamelCase.Text = "CamelCase?";
+			this.chbCamelCase.UseVisualStyleBackColor = true;
+			// 
+			// tbEndAdd
+			// 
+			this.tbEndAdd.Location = new System.Drawing.Point(148, 89);
+			this.tbEndAdd.Name = "tbEndAdd";
+			this.tbEndAdd.Size = new System.Drawing.Size(122, 20);
+			this.tbEndAdd.TabIndex = 7;
+			this.tbEndAdd.Text = "View";
+			// 
+			// label3
+			// 
+			this.label3.AutoSize = true;
+			this.label3.Location = new System.Drawing.Point(148, 73);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(62, 13);
+			this.label3.TabIndex = 6;
+			this.label3.Text = "Añadir Final";
+			// 
+			// tbEndRemove
+			// 
+			this.tbEndRemove.Location = new System.Drawing.Point(6, 89);
+			this.tbEndRemove.Name = "tbEndRemove";
+			this.tbEndRemove.Size = new System.Drawing.Size(122, 20);
+			this.tbEndRemove.TabIndex = 5;
+			// 
+			// label4
+			// 
+			this.label4.AutoSize = true;
+			this.label4.Location = new System.Drawing.Point(6, 73);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(75, 13);
+			this.label4.TabIndex = 4;
+			this.label4.Text = "Remover Final";
+			// 
+			// tbStartAdd
+			// 
+			this.tbStartAdd.Location = new System.Drawing.Point(148, 46);
+			this.tbStartAdd.Name = "tbStartAdd";
+			this.tbStartAdd.Size = new System.Drawing.Size(122, 20);
+			this.tbStartAdd.TabIndex = 3;
+			// 
+			// label2
+			// 
+			this.label2.AutoSize = true;
+			this.label2.Location = new System.Drawing.Point(148, 30);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(80, 13);
+			this.label2.TabIndex = 2;
+			this.label2.Text = "Añadir Principio";
+			// 
+			// tbStartRemove
+			// 
+			this.tbStartRemove.Location = new System.Drawing.Point(6, 46);
+			this.tbStartRemove.Name = "tbStartRemove";
+			this.tbStartRemove.Size = new System.Drawing.Size(122, 20);
+			this.tbStartRemove.TabIndex = 1;
+			this.tbStartRemove.Text = "T_";
+			// 
+			// label1
+			// 
+			this.label1.AutoSize = true;
+			this.label1.Location = new System.Drawing.Point(6, 30);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(93, 13);
+			this.label1.TabIndex = 0;
+			this.label1.Text = "Remover Principio";
 			// 
 			// imgList
 			// 
@@ -208,6 +374,13 @@
 			this.dLLToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
 			this.dLLToolStripMenuItem.Text = "DLL";
 			this.dLLToolStripMenuItem.Click += new System.EventHandler(this.dllToolStripMenuItem_Click);
+			// 
+			// pLSQLToolStripMenuItem
+			// 
+			this.pLSQLToolStripMenuItem.Name = "pLSQLToolStripMenuItem";
+			this.pLSQLToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.pLSQLToolStripMenuItem.Text = "PL-SQL";
+			this.pLSQLToolStripMenuItem.Click += new System.EventHandler(this.pLSQLToolStripMenuItem_Click);
 			// 
 			// exportarToolStripMenuItem
 			// 
@@ -322,177 +495,46 @@
 			// 
 			// toolStripCBTabs
 			// 
+			this.toolStripCBTabs.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.toolStripCBTabs.MaxDropDownItems = 12;
 			this.toolStripCBTabs.Name = "toolStripCBTabs";
 			this.toolStripCBTabs.Size = new System.Drawing.Size(121, 23);
+			this.toolStripCBTabs.SelectedIndexChanged += new System.EventHandler(this.toolStripCBTabs_SelectedIndexChanged);
 			// 
-			// pLSQLToolStripMenuItem
+			// tbNameSpace
 			// 
-			this.pLSQLToolStripMenuItem.Name = "pLSQLToolStripMenuItem";
-			this.pLSQLToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-			this.pLSQLToolStripMenuItem.Text = "PL-SQL";
-			this.pLSQLToolStripMenuItem.Click += new System.EventHandler(this.pLSQLToolStripMenuItem_Click);
-			// 
-			// groupBox1
-			// 
-			this.groupBox1.Controls.Add(this.tbCamelCaseSepNvoCls);
-			this.groupBox1.Controls.Add(this.tbCamelCaseSepActCls);
-			this.groupBox1.Controls.Add(this.label6);
-			this.groupBox1.Controls.Add(this.chbCamelCaseClase);
-			this.groupBox1.Controls.Add(this.tbCamelCaseSepNvoTbl);
-			this.groupBox1.Controls.Add(this.tbCamelCaseSepActTbl);
-			this.groupBox1.Controls.Add(this.label5);
-			this.groupBox1.Controls.Add(this.chbCamelCaseTabla);
-			this.groupBox1.Controls.Add(this.tbTblStartAdd);
-			this.groupBox1.Controls.Add(this.label3);
-			this.groupBox1.Controls.Add(this.tbTblStartRm);
-			this.groupBox1.Controls.Add(this.label4);
-			this.groupBox1.Controls.Add(this.tbClsStartAdd);
-			this.groupBox1.Controls.Add(this.label2);
-			this.groupBox1.Controls.Add(this.tbClsStartRm);
-			this.groupBox1.Controls.Add(this.label1);
-			this.groupBox1.Location = new System.Drawing.Point(8, 6);
-			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(325, 219);
-			this.groupBox1.TabIndex = 0;
-			this.groupBox1.TabStop = false;
-			this.groupBox1.Text = "Convención de Nombres";
-			// 
-			// label1
-			// 
-			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(6, 30);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(122, 13);
-			this.label1.TabIndex = 0;
-			this.label1.Text = "Remover Principio Clase";
-			// 
-			// tbClsStartRm
-			// 
-			this.tbClsStartRm.Location = new System.Drawing.Point(6, 46);
-			this.tbClsStartRm.Name = "tbClsStartRm";
-			this.tbClsStartRm.Size = new System.Drawing.Size(122, 20);
-			this.tbClsStartRm.TabIndex = 1;
-			// 
-			// tbClsStartAdd
-			// 
-			this.tbClsStartAdd.Location = new System.Drawing.Point(148, 46);
-			this.tbClsStartAdd.Name = "tbClsStartAdd";
-			this.tbClsStartAdd.Size = new System.Drawing.Size(122, 20);
-			this.tbClsStartAdd.TabIndex = 3;
-			// 
-			// label2
-			// 
-			this.label2.AutoSize = true;
-			this.label2.Location = new System.Drawing.Point(148, 30);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(109, 13);
-			this.label2.TabIndex = 2;
-			this.label2.Text = "Añadir Principio Clase";
-			// 
-			// tbTblStartAdd
-			// 
-			this.tbTblStartAdd.Location = new System.Drawing.Point(148, 89);
-			this.tbTblStartAdd.Name = "tbTblStartAdd";
-			this.tbTblStartAdd.Size = new System.Drawing.Size(122, 20);
-			this.tbTblStartAdd.TabIndex = 7;
-			// 
-			// label3
-			// 
-			this.label3.AutoSize = true;
-			this.label3.Location = new System.Drawing.Point(148, 73);
-			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(110, 13);
-			this.label3.TabIndex = 6;
-			this.label3.Text = "Añadir Principio Tabla";
-			// 
-			// tbTblStartRm
-			// 
-			this.tbTblStartRm.Location = new System.Drawing.Point(6, 89);
-			this.tbTblStartRm.Name = "tbTblStartRm";
-			this.tbTblStartRm.Size = new System.Drawing.Size(122, 20);
-			this.tbTblStartRm.TabIndex = 5;
-			this.tbTblStartRm.Text = "T_";
-			// 
-			// label4
-			// 
-			this.label4.AutoSize = true;
-			this.label4.Location = new System.Drawing.Point(6, 73);
-			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(123, 13);
-			this.label4.TabIndex = 4;
-			this.label4.Text = "Remover Principio Tabla";
-			// 
-			// chbCamelCaseTabla
-			// 
-			this.chbCamelCaseTabla.AutoSize = true;
-			this.chbCamelCaseTabla.Checked = true;
-			this.chbCamelCaseTabla.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.chbCamelCaseTabla.Location = new System.Drawing.Point(6, 134);
-			this.chbCamelCaseTabla.Name = "chbCamelCaseTabla";
-			this.chbCamelCaseTabla.Size = new System.Drawing.Size(115, 17);
-			this.chbCamelCaseTabla.TabIndex = 8;
-			this.chbCamelCaseTabla.Text = "CamelCase Tabla?";
-			this.chbCamelCaseTabla.UseVisualStyleBackColor = true;
-			// 
-			// tbCamelCaseSepActTbl
-			// 
-			this.tbCamelCaseSepActTbl.Location = new System.Drawing.Point(148, 132);
-			this.tbCamelCaseSepActTbl.Name = "tbCamelCaseSepActTbl";
-			this.tbCamelCaseSepActTbl.Size = new System.Drawing.Size(42, 20);
-			this.tbCamelCaseSepActTbl.TabIndex = 10;
-			this.tbCamelCaseSepActTbl.Text = "_";
-			// 
-			// label5
-			// 
-			this.label5.AutoSize = true;
-			this.label5.Location = new System.Drawing.Point(148, 116);
-			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(132, 13);
-			this.label5.TabIndex = 9;
-			this.label5.Text = "Separador Actual / Nuevo";
-			// 
-			// tbCamelCaseSepNvoTbl
-			// 
-			this.tbCamelCaseSepNvoTbl.Location = new System.Drawing.Point(228, 132);
-			this.tbCamelCaseSepNvoTbl.Name = "tbCamelCaseSepNvoTbl";
-			this.tbCamelCaseSepNvoTbl.Size = new System.Drawing.Size(42, 20);
-			this.tbCamelCaseSepNvoTbl.TabIndex = 11;
-			// 
-			// tbCamelCaseSepNvoCls
-			// 
-			this.tbCamelCaseSepNvoCls.Location = new System.Drawing.Point(228, 174);
-			this.tbCamelCaseSepNvoCls.Name = "tbCamelCaseSepNvoCls";
-			this.tbCamelCaseSepNvoCls.Size = new System.Drawing.Size(42, 20);
-			this.tbCamelCaseSepNvoCls.TabIndex = 15;
-			// 
-			// tbCamelCaseSepActCls
-			// 
-			this.tbCamelCaseSepActCls.Location = new System.Drawing.Point(148, 174);
-			this.tbCamelCaseSepActCls.Name = "tbCamelCaseSepActCls";
-			this.tbCamelCaseSepActCls.Size = new System.Drawing.Size(42, 20);
-			this.tbCamelCaseSepActCls.TabIndex = 14;
-			this.tbCamelCaseSepActCls.Text = "_";
+			this.tbNameSpace.Location = new System.Drawing.Point(6, 202);
+			this.tbNameSpace.Name = "tbNameSpace";
+			this.tbNameSpace.Size = new System.Drawing.Size(122, 20);
+			this.tbNameSpace.TabIndex = 13;
 			// 
 			// label6
 			// 
 			this.label6.AutoSize = true;
-			this.label6.Location = new System.Drawing.Point(148, 158);
+			this.label6.Location = new System.Drawing.Point(6, 186);
 			this.label6.Name = "label6";
-			this.label6.Size = new System.Drawing.Size(132, 13);
-			this.label6.TabIndex = 13;
-			this.label6.Text = "Separador Actual / Nuevo";
+			this.label6.Size = new System.Drawing.Size(105, 13);
+			this.label6.TabIndex = 12;
+			this.label6.Text = "Espacio de Nombres";
 			// 
-			// chbCamelCaseClase
+			// tbUsings
 			// 
-			this.chbCamelCaseClase.AutoSize = true;
-			this.chbCamelCaseClase.Checked = true;
-			this.chbCamelCaseClase.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.chbCamelCaseClase.Location = new System.Drawing.Point(6, 176);
-			this.chbCamelCaseClase.Name = "chbCamelCaseClase";
-			this.chbCamelCaseClase.Size = new System.Drawing.Size(114, 17);
-			this.chbCamelCaseClase.TabIndex = 12;
-			this.chbCamelCaseClase.Text = "CamelCase Clase?";
-			this.chbCamelCaseClase.UseVisualStyleBackColor = true;
+			this.tbUsings.Location = new System.Drawing.Point(6, 241);
+			this.tbUsings.Multiline = true;
+			this.tbUsings.Name = "tbUsings";
+			this.tbUsings.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+			this.tbUsings.Size = new System.Drawing.Size(264, 105);
+			this.tbUsings.TabIndex = 15;
+			this.tbUsings.Text = "using System;\r\nusing System.Collections.Generic;\r\nusing System.Linq;";
+			// 
+			// label7
+			// 
+			this.label7.AutoSize = true;
+			this.label7.Location = new System.Drawing.Point(6, 225);
+			this.label7.Name = "label7";
+			this.label7.Size = new System.Drawing.Size(39, 13);
+			this.label7.TabIndex = 14;
+			this.label7.Text = "Usings";
 			// 
 			// FrmMain
 			// 
@@ -516,10 +558,10 @@
 			this.statBarra.PerformLayout();
 			this.TABs.ResumeLayout(false);
 			this.tpMain.ResumeLayout(false);
-			this.menuStrip1.ResumeLayout(false);
-			this.menuStrip1.PerformLayout();
 			this.groupBox1.ResumeLayout(false);
 			this.groupBox1.PerformLayout();
+			this.menuStrip1.ResumeLayout(false);
+			this.menuStrip1.PerformLayout();
 			this.ResumeLayout(false);
 
 		}
@@ -554,22 +596,25 @@
 		private System.Windows.Forms.ToolStripComboBox toolStripCBTabs;
 		private System.Windows.Forms.ToolStripMenuItem pLSQLToolStripMenuItem;
 		private System.Windows.Forms.GroupBox groupBox1;
-		private System.Windows.Forms.TextBox tbCamelCaseSepNvoCls;
-		private System.Windows.Forms.TextBox tbCamelCaseSepActCls;
-		private System.Windows.Forms.Label label6;
-		private System.Windows.Forms.CheckBox chbCamelCaseClase;
-		private System.Windows.Forms.TextBox tbCamelCaseSepNvoTbl;
-		private System.Windows.Forms.TextBox tbCamelCaseSepActTbl;
+		private System.Windows.Forms.TextBox tbCamelCaseSepNvo;
+		private System.Windows.Forms.TextBox tbCamelCaseSepAct;
 		private System.Windows.Forms.Label label5;
-		private System.Windows.Forms.CheckBox chbCamelCaseTabla;
-		private System.Windows.Forms.TextBox tbTblStartAdd;
+		private System.Windows.Forms.CheckBox chbCamelCase;
+		private System.Windows.Forms.TextBox tbEndAdd;
 		private System.Windows.Forms.Label label3;
-		private System.Windows.Forms.TextBox tbTblStartRm;
+		private System.Windows.Forms.TextBox tbEndRemove;
 		private System.Windows.Forms.Label label4;
-		private System.Windows.Forms.TextBox tbClsStartAdd;
+		private System.Windows.Forms.TextBox tbStartAdd;
 		private System.Windows.Forms.Label label2;
-		private System.Windows.Forms.TextBox tbClsStartRm;
+		private System.Windows.Forms.TextBox tbStartRemove;
 		private System.Windows.Forms.Label label1;
+		private System.Windows.Forms.RadioButton radIdentidad;
+		private System.Windows.Forms.RadioButton radSingular;
+		private System.Windows.Forms.RadioButton radPlural;
+		private System.Windows.Forms.TextBox tbUsings;
+		private System.Windows.Forms.Label label7;
+		private System.Windows.Forms.TextBox tbNameSpace;
+		private System.Windows.Forms.Label label6;
 	}
 }
 

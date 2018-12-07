@@ -21,9 +21,63 @@ namespace Derecho
 		public FrmMain()
 		{
 			InitializeComponent();
+			toolStripCBTabs.Items.Add(tpMain.Text);
+			toolStripCBTabs.SelectedIndex = 0;
+			TABs.MouseWheel += TABs_MouseWheel;
+			//TABs.MouseClick += TABs_MouseClick;
+			TABs.ControlAdded += TABs_ControlAdded;
+			TABs.ControlRemoved += TABs_ControlRemoved;
+		}
+
+		private void TABs_MouseClick(object sender, MouseEventArgs e)
+		{
+			if (e.Button == MouseButtons.Middle)
+			{
+				var tp = TABs.GetChildAtPoint(TABs.PointToClient(e.Location)) as TabPage;
+				if (tp != null)
+				{
+					TABs.TabPages.Remove(tp);
+				}
+			}
+		}
+
+		private void TABs_ControlAdded(object sender, ControlEventArgs e)
+		{
+			TabPage tp = e.Control as TabPage;
+			if (tp != null)
+				toolStripCBTabs.Items.Add(tp.Text);
+		}
+
+		private void TABs_ControlRemoved(object sender, ControlEventArgs e)
+		{
+			TabPage tp = e.Control as TabPage;
+			if (tp != null)
+			{
+				int i = TABs.TabPages.IndexOf(tp);
+				toolStripCBTabs.Items.RemoveAt(i);
+			}
 		}
 
 		#region Control de Pestañas
+		private void TABs_MouseWheel(object sender, MouseEventArgs e)
+		{
+			if (e.Delta < 0 && TABs.SelectedIndex < TABs.TabCount - 1)
+				TABs.SelectedIndex++;
+			else if (e.Delta > 0 && TABs.SelectedIndex > 0)
+				TABs.SelectedIndex--;
+		}
+
+		private void toolStripCBTabs_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (TABs.SelectedIndex == toolStripCBTabs.SelectedIndex)
+				return;
+			if (sender == TABs)
+				toolStripCBTabs.SelectedIndex = TABs.SelectedIndex;
+			else
+				TABs.SelectedIndex = toolStripCBTabs.SelectedIndex;
+
+		}
+
 		private void xToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			CerrarActual();
@@ -128,20 +182,25 @@ namespace Derecho
 			try
 			{
 				entidades = ERWinHelper.ConvertirXml(open.FileName);
-				foreach (Entidad ent in entidades)
+				foreach (Entidad ent in entidades)//recorrer para convertir convenciones
 				{
+					ent.NombreNamespace = tbNameSpace.Text;
 					string nbreClase = ent.NombreTabla;
-					nbreClase = nbreClase.StartsWith(tbClsStartRm.Text) ? nbreClase.Substring(tbClsStartRm.Text.Length) : nbreClase;//posible T_*****
-					nbreClase += tbClsStartAdd.Text.Trim();//posible Clase+FIN
-					if (chbCamelCaseClase.Checked)
-						nbreClase = Utils.CamelCase(nbreClase, tbCamelCaseSepActCls.Text, tbCamelCaseSepNvoCls.Text);//CAMEL CASE
+					if (radSingular.Checked)
+						nbreClase = Utils.Singular(nbreClase);
+					if (chbCamelCase.Checked)
+						nbreClase = Utils.CamelCase(nbreClase, tbCamelCaseSepAct.Text, tbCamelCaseSepNvo.Text);//CAMEL CASE
+					if (tbStartRemove.Text.Length > 0)
+						nbreClase = nbreClase.StartsWith(tbStartRemove.Text) ? nbreClase.Substring(tbStartRemove.Text.Length) : nbreClase;//posible T_*****
+					if (tbEndRemove.Text.Length > 0)
+						nbreClase = nbreClase.EndsWith(tbEndRemove.Text) ? nbreClase.Substring(nbreClase.Length - 1 - tbEndRemove.Text.Length) : nbreClase;//posible *****_TABLE
+					nbreClase = tbStartAdd.Text.Trim() + nbreClase + tbEndAdd.Text;//posible Clase+FIN
 					ent.NombreClase = nbreClase;
 					foreach (Atributo attr in ent.Atributos)
 					{
-						string t = Utils.ConvertirTipoSQL_NET(attr.TipoSQL, attr.Nombre);
-						if (chbCamelCaseClase.Checked)
-							t = Utils.CamelCase(t, tbCamelCaseSepActCls.Text, tbCamelCaseSepNvoCls.Text);
-						attr.TipoNet = t;
+						attr.TipoNet = Utils.ConvertirTipoSQL_NET(attr.TipoSQL, !attr.NotNull, attr.Nombre);
+						if (chbCamelCase.Checked)
+							attr.Nombre = Utils.CamelCase(attr.Nombre, tbCamelCaseSepAct.Text, tbCamelCaseSepNvo.Text);
 					}
 				}
 				statMensaje.Text = "XML de ERWin leído!";
@@ -155,8 +214,8 @@ namespace Derecho
 			try
 			{
 				//var codigo = ERWinHelper.GenerarClases(entidades);
-				string[] ns = { "System", "System.Linq" };
-				var codigo = Utils.GenerarClases(entidades, ns);
+				//string[] ns = { "System", "System.Linq" };
+				var codigo = Utils.GenerarClases(entidades, tbUsings.Lines);
 				for (int i = 0; i < entidades.Count; i++)
 				{
 					Entidad ent = entidades[i];
@@ -202,7 +261,7 @@ namespace Derecho
 				{
 					List<Type> tipos = o as List<Type>;
 					string[] plantillasPCK, plantillasDAC;
-					DllHelper.GenerarPlantillas(tipos, out plantillasPCK, out plantillasDAC);
+					DllHelper.GenerarPlantillas(tipos, out plantillasPCK, out plantillasDAC, tbNameSpace.Text, tbUsings.Text);
 					int i = 0;
 					foreach (var t in tipos)
 					{
@@ -289,7 +348,63 @@ namespace Derecho
 
 		private void pLSQLToolStripMenuItem_Click(object sender, EventArgs e)
 		{
+			OpenFileDialog open = new OpenFileDialog();
+			open.Title = "Abrir SQL";
+			open.Filter = "Archivos SQL (*.sql)|*.sql|Archivos de Texto (*.txt)|*.txt|Todos los archivos (*.*)|*.*";
+			open.FilterIndex = 1;
+			if (open.ShowDialog() != DialogResult.OK)
+				return;
+			IList<Entidad> entidades = null;
+			try
+			{
+				entidades = SQLHelper.LeerPLSQL(open.FileName);
+				foreach (Entidad ent in entidades)//recorrer para convertir convenciones
+				{
+					ent.NombreNamespace = tbNameSpace.Text;
+					string nbreClase = ent.NombreTabla;
+					if (radSingular.Checked)
+						nbreClase = Utils.Singular(nbreClase);
+					if (chbCamelCase.Checked)
+						nbreClase = Utils.CamelCase(nbreClase, tbCamelCaseSepAct.Text, tbCamelCaseSepNvo.Text);//CAMEL CASE
+					if (tbStartRemove.Text.Length > 0)
+						nbreClase = nbreClase.StartsWith(tbStartRemove.Text) ? nbreClase.Substring(tbStartRemove.Text.Length) : nbreClase;//posible T_*****
+					if (tbEndRemove.Text.Length > 0)
+						nbreClase = nbreClase.EndsWith(tbEndRemove.Text) ? nbreClase.Substring(nbreClase.Length - 1 - tbEndRemove.Text.Length) : nbreClase;//posible *****_TABLE
+					nbreClase = tbStartAdd.Text.Trim() + nbreClase + tbEndAdd.Text;//posible Clase+FIN
+					ent.NombreClase = nbreClase;
+					foreach (Atributo attr in ent.Atributos)
+					{
+						attr.TipoNet = Utils.ConvertirTipoSQL_NET(attr.TipoSQL, !attr.NotNull, attr.Nombre);
+						if (chbCamelCase.Checked)
+							attr.Nombre = Utils.CamelCase(attr.Nombre, tbCamelCaseSepAct.Text, tbCamelCaseSepNvo.Text);
+					}
+				}
+				statMensaje.Text = "SQL leído!";
+			}
+			catch (Exception ex)
+			{
 
+				MessageBox.Show(ex.Message, "Error al Leer SQL", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				return;
+			}
+			try
+			{
+				//string[] ns = { "System", "System.Linq" };
+				var codigo = Utils.GenerarClases(entidades, tbNameSpace.Lines);
+				for (int i = 0; i < entidades.Count; i++)
+				{
+					Entidad ent = entidades[i];
+					var nbreArchivo = String.IsNullOrWhiteSpace(ent.NombreClase) ? ent.NombreTabla : ent.NombreClase;
+					nbreArchivo += ".cs";
+					NuevaTab(new Editor() { Text = codigo[i] }, nbreArchivo, nbreArchivo, "CSharp");
+				}
+			}
+			catch (Exception ex)
+			{
+
+				MessageBox.Show(ex.Message, "Error al Crear Código C#", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				return;
+			}
 		}
 	}
 }
