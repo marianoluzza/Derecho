@@ -282,13 +282,14 @@ namespace Derecho
 				Func<object, object> generar = delegate (object o)
 				{
 					List<Type> tipos = o as List<Type>;
-					string[] plantillasPCK, plantillasDAC;
-					DllHelper.GenerarPlantillas(tipos, out plantillasPCK, out plantillasDAC, tbNameSpace.Text, tbUsings.Text);
+					string[] plantillasPCK, plantillasDAC, plantillasTabla;
+					DllHelper.GenerarPlantillas(tipos, out plantillasPCK, out plantillasDAC, out plantillasTabla, tbNameSpace.Text, tbUsings.Text);
 					int i = 0;
 					foreach (var t in tipos)
 					{
 						NuevaTab(new Editor() { Text = plantillasDAC[i] }, t.Namespace + "." + t.Name + ".cs", t.Namespace + "." + t.Name + ".cs", "CSharp");
 						NuevaTab(new Editor() { Text = plantillasPCK[i] }, t.Namespace + "." + t.Name + ".sql", t.Namespace + "." + t.Name + ".sql", "Oracle");
+						NuevaTab(new Editor() { Text = plantillasTabla[i] }, t.Namespace + ".T_" + t.Name + ".sql", t.Namespace + ".T_" + t.Name + ".sql", "Oracle");
 						i++;
 					}
 					NuevaTab(new Editor() { Text = String.Join(Environment.NewLine + "GO" + Environment.NewLine, plantillasPCK) }, tbNameSpace.Text + "._All Packages.sql", tbNameSpace.Text + "._All Packages.sql.sql", "Oracle");

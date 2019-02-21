@@ -85,10 +85,13 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Recursos.resx</DependentUpon>
     </Compile>
+    <Compile Include="Transformadores\DataRowExtensions.cs" />
     <Compile Include="Transformadores\DllHelper.cs" />
     <Compile Include="Transformadores\ERWinHelper.cs" />
     <Compile Include="Transformadores\Plantilla.cs" />
+    <Compile Include="Transformadores\PlantillaDacVja.cs" />
     <Compile Include="Transformadores\PlantillaDac.cs" />
+    <Compile Include="Transformadores\PlantillaTabla.cs" />
     <Compile Include="Transformadores\PlantillaPackage.cs" />
     <Compile Include="Transformadores\SQLHelper.cs" />
     <Compile Include="Transformadores\Utils.cs" />

@@ -44,7 +44,7 @@ namespace Derecho.Transformadores
 			return ns_tipos;
 		}
 
-		public static void GenerarPlantillas(IEnumerable<Type> lstTipos, out string[] plantillasPCK, out string[] plantillasDAC, string nameSpace, string usings)
+		public static void GenerarPlantillas(IEnumerable<Type> lstTipos, out string[] plantillasPCK, out string[] plantillasDAC, out string[] plantillasTabla, string nameSpace, string usings)
 		{
 			List<Tabla> tablas = new List<Tabla>();
 			/*var consulta = AppDomain.CurrentDomain.GetAssemblies()
@@ -68,6 +68,7 @@ namespace Derecho.Transformadores
 				Dictionary<string, string> mapeoType = new Dictionary<string, string>();
 				Dictionary<string, string> adoDbType = new Dictionary<string, string>();
 				Dictionary<string, string> netType = new Dictionary<string, string>();
+				Dictionary<string, bool> esNullable = new Dictionary<string, bool>();
 
 				//trato de poner en singular el nombre de la tabla
 				string singular = "";
@@ -135,9 +136,15 @@ namespace Derecho.Transformadores
 						mapeoType.Add(paramName, paramTypeName);
 						adoDbType.Add(paramName, propAdoDbType);
 						if (p.PropertyType.IsGenericType && p.PropertyType.GetGenericTypeDefinition() == typeof(Nullable<>))
+						{
 							netType.Add(paramName, Nullable.GetUnderlyingType(p.PropertyType).Name);
+							esNullable.Add(paramName, true);
+						}
 						else
+						{
 							netType.Add(paramName, p.PropertyType.Name);
+							esNullable.Add(paramName, false);
+						}
 					}
 				}
 				tablas.Add(new Tabla
@@ -153,7 +160,8 @@ namespace Derecho.Transformadores
 					mapeo = mapeo,
 					paramType = mapeoType,
 					adoDbType = adoDbType,
-					netType = netType
+					netType = netType,
+					esNullable = esNullable
 				});
 			}
 
@@ -173,12 +181,18 @@ namespace Derecho.Transformadores
 
 			//generar los pkg completos
 			PlantillaPackage pPck = new PlantillaPackage();
+			pPck.NameSpace = nameSpace;
+			pPck.Usings = usings;
 			PlantillaDac pDac = new PlantillaDac();
 			pDac.NameSpace = nameSpace;
 			pDac.Usings = usings;
+			PlantillaTabla pTabla = new PlantillaTabla();
+			pTabla.NameSpace = nameSpace;
+			pTabla.Usings = usings;
 
 			List<string> lstStrPCK = new List<string>();
 			List<string> lstStrDAC = new List<string>();
+			List<string> lstStrTablas = new List<string>();
 			foreach (Tabla t in tablas)
 			{
 				//CrearArchivo("PCK_" + t.tableName.ToUpper() + ".txt", pPck.Generar(t));
@@ -201,9 +215,19 @@ namespace Derecho.Transformadores
 					lstStrDAC.Add(ex.Message);
 					Console.Error.WriteLine("Error al generar DAC para " + t.tableName + ": " + ex.Message);
 				}
+				try
+				{
+					lstStrTablas.Add(pTabla.Generar(t));
+				}
+				catch (Exception ex)
+				{
+					lstStrTablas.Add(ex.Message);
+					Console.Error.WriteLine("Error al generar TABLE para " + t.tableName + ": " + ex.Message);
+				}
 			}
 			plantillasPCK = lstStrPCK.ToArray();
 			plantillasDAC = lstStrDAC.ToArray();
+			plantillasTabla = lstStrTablas.ToArray();
 		}
 	}
 }

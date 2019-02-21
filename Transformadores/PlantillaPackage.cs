@@ -18,9 +18,12 @@ namespace Derecho.Transformadores
 
             //obtengo la plantilla
             string p = Plantilla();
+			
+			//remplazo nombre del namespace / database
+			p = p.Replace("{{NAMESPACE}}", NameSpace);
 
-            //remplazo noombre del paquete
-            p = p.Replace("{{PCK_NAME}}", pckName);
+			//remplazo noombre del paquete
+			p = p.Replace("{{PCK_NAME}}", pckName);
 
             //remplazo basename
             p = p.Replace("{{BASE_NAME}}", baseName);
@@ -71,105 +74,111 @@ namespace Derecho.Transformadores
         }
 
         private string Plantilla() {
-            string plantilla = @"
-                /* --------------------------------> SPEC <---------------------------------- */
+            string plantilla =
+@"                /* --------------------------------> SPEC <---------------------------------- */
                 
-                CREATE OR REPLACE PACKAGE ""AGRO_REGISTRO"".""{{PCK_NAME}}""
+CREATE OR REPLACE PACKAGE ""{{NAMESPACE}}"".""{{PCK_NAME}}""
 
-                AS
+AS
 
-                /* PROCEDIMIENTO QUE DEVUELVE LOS ESTADOS POSIBLES DE UN TRAMITE, PUEDO FILTRAR POR ID Y VIGENTE */
-                PROCEDURE PR_{{BASE_NAME}}_GET 
-                    (
-                        {{PARAM_LIST_WPKT}},
-    	                pCursor out types.cursorType
-                    );
+/* PROCEDIMIENTO QUE DEVUELVE TODOS LOS REGISTROS DE {{BASE_NAME}} */
+PROCEDURE PR_{{BASE_NAME}}_GET 
+(
+	{{PK_PARAM_NAME}} IN {{PK_PARAM_TYPE}},
+	/* DEMAS PARAMETROS POR LAS DUDAS
+    {{PARAM_LIST}}
+	*/
+    pCursor out types.cursorType
+);
 
-                /*PROCEDIMIENTO QUE INSERTA UN NUEVO ESTADO TRAMITE Y DEVUELVE EL NUEVO ID*/
-                PROCEDURE PR_{{BASE_NAME}}_INSERT
-                    (
-                        {{PK_PARAM_NAME}} OUT {{PK_PARAM_TYPE}},
-                        {{PARAM_LIST}}
-                    );
+/*PROCEDIMIENTO QUE INSERTA UN REGISTRO EN {{BASE_NAME}} Y DEVUELVE EL NUEVO ID*/
+PROCEDURE PR_{{BASE_NAME}}_INSERT
+(
+    {{PK_PARAM_NAME}} OUT {{PK_PARAM_TYPE}},
+    {{PARAM_LIST}}
+);
 
-                /*PROCEDIMIENTO QUE ACTUALIZA UN REGITRO DE ESTADOS TRAMITE*/
-                PROCEDURE PR_{{BASE_NAME}}_UPDATE
-                    (
-                        {{PARAM_LIST_WPKT}}
-                    );
+/*PROCEDIMIENTO QUE ACTUALIZA UN REGITRO DE {{BASE_NAME}}*/
+PROCEDURE PR_{{BASE_NAME}}_UPDATE
+(
+    {{PARAM_LIST_WPKT}}
+);
 
-                /*PROCEDIMIENTO QUE BORRA UN REGISTRO DE ESTADOS TRAMITE*/
-                PROCEDURE PR_{{BASE_NAME}}_DELETE
-                    (
-                        {{PK_PARAM_NAME}} IN {{PK_PARAM_TYPE}}
-                    );
-                END;
+/*PROCEDIMIENTO QUE BORRA UN REGISTRO DE {{BASE_NAME}}*/
+PROCEDURE PR_{{BASE_NAME}}_DELETE
+(
+    {{PK_PARAM_NAME}} IN {{PK_PARAM_TYPE}}
+);
+END;
 /*************************** SEPARADOR GO ********************************************************/
 
 GO
 
-                /* --------------------------------> BODY <---------------------------------- */
-                CREATE OR REPLACE PACKAGE BODY ""AGRO_REGISTRO"".""{{PCK_NAME}}"" AS
+/* --------------------------------> BODY <---------------------------------- */
+CREATE OR REPLACE PACKAGE BODY ""{{NAMESPACE}}"".""{{PCK_NAME}}"" AS
 
 
-                /* PROCEDIMIENTO QUE DEVUELVE LOS {{BASE_NAME}} Y APLICA UN FILTRO POR PK */
-                PROCEDURE PR_{{BASE_NAME}}_GET
-                    (
-                        {{PARAM_LIST_WPKT}},
-                        pCursor out types.cursorType
-                    ) IS
-                BEGIN
-
-                    OPEN pCursor FOR
-                        SELECT
-                            {{ATTR_LIST_WPK}}
-                        FROM   {{TABLE_NAME}}
-                        WHERE
-                            ({{PK_PARAM_NAME}} IS NULL OR {{PK_ATTR_NAME}} = {{PK_PARAM_NAME}});
+/* PROCEDIMIENTO QUE DEVUELVE LOS REGISTROS DE {{BASE_NAME}} Y APLICA UN FILTRO POR PK */
+PROCEDURE PR_{{BASE_NAME}}_GET
+(
+    {{PK_PARAM_NAME}} IN {{PK_PARAM_TYPE}},
+	/* DEMAS PARAMETROS POR LAS DUDAS
+    {{PARAM_LIST}}
+	*/
+    pCursor out types.cursorType
+) IS 
+BEGIN 
+OPEN pCursor FOR
+SELECT
+    {{ATTR_LIST_WPK}}
+FROM   {{TABLE_NAME}}
+WHERE
+    ({{PK_PARAM_NAME}} IS NULL OR {{PK_ATTR_NAME}} = {{PK_PARAM_NAME}});
  
+END PR_{{BASE_NAME}}_GET;
 
-                    END PR_{{BASE_NAME}}_GET;
-
-                    /*PROCEDIMIENTO QUE INSERTA UN NUEVO EN {{BASE_NAME}} Y DEVUELVE EL NUEVO ID*/
-                    PROCEDURE PR_{{BASE_NAME}}_INSERT
-                        (
-                            {{PK_PARAM_NAME}} OUT {{PK_PARAM_TYPE}},
-                            {{PARAM_LIST}}
-                        ) IS
-                            pNextId NUMBER;
-                    BEGIN
-                        SELECT SEQ_{{BASE_NAME}}.NEXTVAL INTO pNextId FROM DUAL;
-                        INSERT INTO {{TABLE_NAME}} ( {{ATTR_LIST_WPK}} ) VALUES( pNextId, {{PARAM_LIST_SINTIPOS}} );
-                        {{PK_PARAM_NAME}} := pNextId;
+/*PROCEDIMIENTO QUE INSERTA UN NUEVO REGISTRO EN {{BASE_NAME}} Y DEVUELVE EL NUEVO ID*/
+PROCEDURE PR_{{BASE_NAME}}_INSERT
+(
+    {{PK_PARAM_NAME}} OUT {{PK_PARAM_TYPE}},
+    {{PARAM_LIST}}
+) IS
+    pNextId NUMBER;
+BEGIN
+SELECT SEQ_{{BASE_NAME}}.NEXTVAL INTO pNextId FROM DUAL;
+INSERT INTO {{TABLE_NAME}} ( 
+	{{ATTR_LIST_WPK}} ) 
+VALUES( 
+	pNextId, 
+	{{PARAM_LIST_SINTIPOS}} );
+{{PK_PARAM_NAME}} := pNextId;
                             
-                    END PR_{{BASE_NAME}}_INSERT;
+END PR_{{BASE_NAME}}_INSERT;
 
-                    /*PROCEDIMIENTO QUE ACTUALIZA UN REGITRO DE {{BASE_NAME}}*/
-                    PROCEDURE PR_{{BASE_NAME}}_UPDATE
-                        (
-                            {{PARAM_LIST_WPKT}}
-                        ) IS
-                    BEGIN
-                        UPDATE {{TABLE_NAME}} SET
-                            {{UPDATE_LIST}}
-                         WHERE
-                            {{PK_ATTR_NAME}} = {{PK_PARAM_NAME}};
+/*PROCEDIMIENTO QUE ACTUALIZA UN REGITRO DE {{BASE_NAME}}*/
+PROCEDURE PR_{{BASE_NAME}}_UPDATE
+(
+    {{PARAM_LIST_WPKT}}
+) IS 
+BEGIN
+UPDATE {{TABLE_NAME}} SET
+    {{UPDATE_LIST}}
+    WHERE
+    {{PK_ATTR_NAME}} = {{PK_PARAM_NAME}};
 
-                    END PR_{{BASE_NAME}}_UPDATE;
+END PR_{{BASE_NAME}}_UPDATE;
 
-                    /*PROCEDIMIENTO QUE BORRA UN REGISTRO DE {{BASE_NAME}} POR ID*/
-                    PROCEDURE PR_{{BASE_NAME}}_DELETE
-                        (
-                            {{PK_PARAM_NAME}} IN {{PK_PARAM_TYPE}}
-                        ) IS
-                    BEGIN
-                        DELETE FROM {{TABLE_NAME}} WHERE {{PK_ATTR_NAME}} = {{PK_PARAM_NAME}};
+/*PROCEDIMIENTO QUE BORRA UN REGISTRO DE {{BASE_NAME}} POR ID*/
+PROCEDURE PR_{{BASE_NAME}}_DELETE
+(
+    {{PK_PARAM_NAME}} IN {{PK_PARAM_TYPE}}
+) IS
+BEGIN
+DELETE FROM {{TABLE_NAME}} WHERE {{PK_ATTR_NAME}} = {{PK_PARAM_NAME}};
 
-                    END PR_{{BASE_NAME}}_DELETE;
+END PR_{{BASE_NAME}}_DELETE;
 
-                    END {{PCK_NAME}};
-
-                    ";
+END {{PCK_NAME}};";
 
             return plantilla;
         }

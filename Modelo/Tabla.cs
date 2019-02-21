@@ -16,13 +16,19 @@ namespace Derecho.Modelo
         public string pkType { get; set; }
         public string pkNetType { get; set; }
         public string pkAdoType { get; set; }
-        //diccionario para atributoTabla -> nombreparámetro
-        public Dictionary<string, string> mapeo { get; set; }
+		
+		//diccionario para atributoTabla -> nombreparámetro
+		public Dictionary<string, string> mapeo { get; set; }
         //diccionario para nombreparametro -> tipo oracle pck
         public Dictionary<string, string> paramType { get; set; }
         //diccionario para nombreparametro -> tipo ora param
         public Dictionary<string, string> adoDbType { get; set; }
         //diccionario para nombreparametro -> tipo en .NET
         public Dictionary<string, string> netType { get; set; }
-    }
+		//diccionario para nombreparametro -> tipo en .NET
+		/// <summary>
+		/// Tienen ? o permite null en la BD
+		/// </summary>
+		public Dictionary<string, bool> esNullable { get; set; }
+	}
 }

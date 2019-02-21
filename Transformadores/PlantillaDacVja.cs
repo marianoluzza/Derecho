@@ -3,10 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Derecho.Transformadores
 {
-	class PlantillaDac : Plantilla
+	class PlantillaDacVja : Plantilla
 	{
 		public override string Generar(Tabla tabla)
 		{
@@ -45,8 +46,8 @@ namespace Derecho.Transformadores
 			p = p.Replace("{{CLASS_NAME}}", tabla.className + "Dac");
 
 			//remplazo los oraparams para el insert
-			string demasOraParams = GetOraParamsDemas(tabla);
-			p = p.Replace("{{DEMAS_ORA_PARAMS}}", demasOraParams);
+			string insertOraParams = GetOraParamsInsert(tabla, true);
+			p = p.Replace("{{INSERT_ORA_PARAMS}}", insertOraParams);
 
 			//remplazo los parametros del método get de la clase incluyendo la pk
 			string metodoGetParams = GetMethodParams(tabla, true);
@@ -70,39 +71,82 @@ namespace Derecho.Transformadores
 
 		private string Plantilla()
 		{
-			string plantilla =
-@"{{USINGS}}
+			string plantilla = @"
+{{USINGS}}
 
 namespace {{NAME_SPACE}}
 {
 
 	public partial class {{CLASS_NAME}}
 	{
-		const string TABLA = ""{{BASE_NAME}}"";
-		const string SP_PREFIX = ""PCK_"" + TABLA + "".PR_"" + TABLA + ""_"";
-
 		#region Manipulacion de Registros
-		public static Hashtable ABM({{ENT_CLASS_NAME}} obj, eABM op, out List<Exception> Ex)
+		public static Hashtable insert({{ENT_CLASS_NAME}} obj, out List<Exception> Ex)
 		{
 			Hashtable ret = new Hashtable();
 			Ex = new List<Exception>();
+			//OracleParameter[] oParam = new OracleParameter[{{CANT_PARAMS_INSERT}}];
 			List<OracleParameter> oParam = new List<OracleParameter>({{CANT_PARAMS_INSERT}});
 
 			try
 			{
-				oParam.Add(new OracleParameter(""{{PK_PARAM_NAME}}"", OracleDbType.Int32, 9, obj.{{PK_PROP_NAME}}, ParameterDirection.InputOutput));
-				if (op != eABM.DELETE)
-				{
-					{{DEMAS_ORA_PARAMS}}
-				}
+				{{INSERT_ORA_PARAMS}}
 
 				Data pData = new Data();
-				string SP = SP_PREFIX + op.ToString();
-				pData.EjecutarSP(SP, oParam.ToArray());
 
-				if (op == eABM.INSERT)
-					obj.{{PK_PROP_NAME}} = Convert.ToInt32(oParam[0].Value.ToString());
-				ret.Add(""O_"" + nameof(obj.{{PK_PROP_NAME}}), obj.{{PK_PROP_NAME}});
+				pData.EjecutarSP(""AGRO_REGISTRO.{{PCK_NAME}}.PR_{{BASE_NAME}}_INSERT"", oParam.ToArray());
+				obj.{{PK_PROP_NAME}} = Convert.ToInt32(oParam[0].Value.ToString());
+				
+				ret.Add(""O_{{PK_PROP_NAME}}"", obj.{{PK_PROP_NAME}});
+			}
+			catch (Exception ex)
+			{
+				Ex.Add(ex);
+			}
+			return ret;
+		}
+
+		public static Hashtable update({{ENT_CLASS_NAME}} obj, out List<Exception> Ex)
+		{
+			Hashtable ret = new Hashtable();
+			Ex = new List<Exception>();
+			//OracleParameter[] oParam = new OracleParameter[{{CANT_PARAMS_INSERT}}];
+			List<OracleParameter> oParam = new List<OracleParameter>({{CANT_PARAMS_INSERT}});
+
+			try
+			{
+				//Lista de parametro igual a la del método insert
+				{{INSERT_ORA_PARAMS}}
+
+				Data pData = new Data();
+
+				pData.EjecutarSP(""AGRO_REGISTRO.{{PCK_NAME}}.PR_{{BASE_NAME}}_UPDATE"", oParam.ToArray());
+				ret.Add(""O_{{PK_PROP_NAME}}"", obj.{{PK_PROP_NAME}});
+
+
+			}
+			catch (Exception ex)
+			{
+				Ex.Add(ex);
+			}
+			return ret;
+		}
+
+		public static Hashtable delete(int {{PK_PARAM_NAME}}, out List<Exception> Ex)
+		{
+			Hashtable ret = new Hashtable();
+			Ex = new List<Exception>();
+			OracleParameter[] oParam = new OracleParameter[1];
+
+			try
+			{
+				oParam[0] = new OracleParameter(""{{PK_PARAM_NAME}}"", OracleDbType.Int32, 9);
+				oParam[0].Value = {{PK_PARAM_NAME}};
+
+				Data pData = new Data();
+
+				pData.EjecutarSP(""AGRO_REGISTRO.{{PCK_NAME}}.PR_{{BASE_NAME}}_DELETE"", oParam);
+				ret.Add(""O_{{PK_PROP_NAME}}"", {{PK_PARAM_NAME}});
+
 			}
 			catch (Exception ex)
 			{
@@ -114,30 +158,34 @@ namespace {{NAME_SPACE}}
 
 		#region Consultas
 		/// <summary>
-		/// Obtiene un listado de entidades aplicando filtros correspondientes
+		/// Obtiene los  de actividades existentes aplicando filtros correspondientes
 		/// Devuelve la estructura de la tabla
 		/// </summary>
-		public static List<{{ENT_CLASS_NAME}}> Get(Int32? id, out List<Exception> Ex)
+		/// <param name=""Ex""></param>
+		/// <returns></returns>
+		public static List<{{ENT_CLASS_NAME}}> Get(
+						{{GET_METHOD_PARAMS}}, 
+						out List<Exception> Ex)
 		{
 
 			Ex = new List<Exception>();
 			List<{{ENT_CLASS_NAME}}> obj = new List<{{ENT_CLASS_NAME}}>();
+
+			//OracleParameter[] oParam = new OracleParameter[{{CANT_PARAMS_INSERT}}+1];
 			List<OracleParameter> oParam = new List<OracleParameter>({{CANT_PARAMS_INSERT}}+1);
-			//
+
 			DataSet ORADataSet = new DataSet();
+			Data objData = new Data();
+
 			try
 			{
-				oParam.Add(new OracleParameter(""pId"", OracleDbType.Int32, 9, id ?? (object)DBNull.Value, ParameterDirection.Input));
-				//oParam.Add(new OracleParameter(""pNombre"", OracleDbType.NVarchar2, 100, obj.N_{{ENT_CLASS_NAME}}, ParameterDirection.Input));
-				//
+				{{GET_METHOD_ORA_PARAMS}}
+
 				var paramCursor = new OracleParameter(""pCursor"", OracleDbType.RefCursor);
 				paramCursor.Direction = ParameterDirection.Output;
 				oParam.Add(paramCursor);
-				//
-				Data pData = new Data();
-				//{{PCK_NAME}}.PR_{{BASE_NAME}}_GET
-				string SP = SP_PREFIX + ""GET"";
-				pData.EjecutarSP(SP, oParam.ToArray(), ORADataSet);
+
+				objData.EjecutarSP(""AGRO_REGISTRO.{{PCK_NAME}}.PR_{{BASE_NAME}}_GET"", oParam.ToArray(), ORADataSet);
 			}
 			catch (Exception ex)
 			{
@@ -154,31 +202,34 @@ namespace {{NAME_SPACE}}
 				if (dt.Rows.Count > 0)
 					obj = Fill(dt);
 			}
+
 			return obj;
 		}
 
 		/// <summary>
-		/// Obtiene todos las entidades existentes
+		/// Obtiene todos los  de actividades existentes
 		/// Devuelve la estructura de la tabla
 		/// </summary>
+		/// <param name=""Ex""></param>
+		/// <returns></returns>
 		public static List<{{ENT_CLASS_NAME}}> GetAll(out List<Exception> Ex)
 		{
-			return Get(null, out Ex);
+			return Get({{NULL_LIST}},out Ex);
 		}
 
 		private static List<{{ENT_CLASS_NAME}}> Fill(DataTable tbl)
 		{
 			List<{{ENT_CLASS_NAME}}> pRet = new List<{{ENT_CLASS_NAME}}>();
+
 			foreach (DataRow reader in tbl.Rows)
 			{
-				{{ENT_CLASS_NAME}} obj = new {{ENT_CLASS_NAME}}
-				{
-					//Campos de la tabla. Contemplar casos en que el valor a obtener pueda ser nulo
-					{{FILL_METHOD_MAP}}
-				};
-				//
+				{{ENT_CLASS_NAME}} obj = new {{ENT_CLASS_NAME}}();
+				//Campos de la tabla. Contemplar casos en que el valor a obtener pueda ser nulo
+				{{FILL_METHOD_MAP}}
+				
 				pRet.Add(obj);
 			}
+
 			return pRet;
 		}
 
@@ -188,18 +239,23 @@ namespace {{NAME_SPACE}}
 		/// </summary>
 		/// <param name=""Ex""></param>
 		/// <returns></returns>
-		public static DataSet Show(Int32? pId, out List<Exception> Ex)
+		public static DataSet Show(
+						{{GET_METHOD_PARAMS}},
+						out List<Exception> Ex)
 		{
 			Ex = new List<Exception>();
+
 			Ex.Add(new Exception(""No implementado.""));
 			DataSet ORADataSet = new DataSet();
 			//Copiar implementación de get pero llamando al procedure show en caso de ser necesario
 			return ORADataSet;
 		}
+
 		#endregion
 	}
-}";
-			//
+}
+";
+
 			return plantilla;
 		}
 
@@ -211,21 +267,21 @@ namespace {{NAME_SPACE}}
 			switch (netType)
 			{
 				case "Int32":
-					res = @" Convert.ToInt32(reader[nameof(obj." + attrName + @").ToUpper()]), ";
+					res = @" Convert.ToInt32(reader[""" + attrName + @"""]); ";
 					break;
 				case "Boolean":
-					res = @" Convert.ToBoolean(reader[nameof(obj." + attrName + @").ToUpper()]), ";
+					res = @" Convert.ToBoolean(reader[""" + attrName + @"""]); ";
 					break;
 				case "DateTime":
-					res = @" Convert.ToDateTime(reader[nameof(obj." + attrName + @").ToUpper()]), ";
+					res = @" Convert.ToDateTime(reader[""" + attrName + @"""]); ";
 					break;
 				case "String":
-					res = @" reader[nameof(obj." + attrName + @").ToUpper()].ToString(), ";
+					res = @" reader[""" + attrName + @"""].ToString(); ";
 					break;
 			}
 			if (esNullable)
 			{
-				res = "Convert.IsDBNull(reader[nameof(obj." + attrName + ").ToUpper()]) ? (" + netType + "?)null : " + res;
+				res = "Convert.IsDBNull(reader[\"" + attrName + "\"]) ? (" + netType + "?)null : " + res;
 			}
 			return res;
 		}
@@ -252,11 +308,11 @@ namespace {{NAME_SPACE}}
 			string pTemp = "";
 
 			string pkType = tabla.pkNetType;
-			
+
 			if (incluirPK)
 			{
 				//obj.NEstadoTramite = reader[""N_ESTADO_TRAMITE""].ToString();
-				pTemp = @"\t" + tabla.pkPropName + " = " + GetConvertUtil(tabla.pkPropName, tabla.pkNetType, false);
+				pTemp = @"obj." + tabla.pkPropName + " = " + GetConvertUtil(tabla.pkAttrName, tabla.pkNetType, false); ;
 				idx++;
 				sb.Append(pTemp + "\n");
 			}
@@ -265,10 +321,9 @@ namespace {{NAME_SPACE}}
 				paramName = kv.Value;
 				attrName = kv.Key;
 				propName = Utils.CamelCase(kv.Key, "_");
-				netType = tabla.netType[paramName]; 
-				//string prop 
+				netType = tabla.netType[paramName];
 
-				 pTemp = pTemp = @"\t" + propName + " = " + GetConvertUtil(propName, netType, tabla.esNullable[paramName]);
+				pTemp = pTemp = @"obj." + propName + " = " + GetConvertUtil(attrName, netType, tabla.esNullable[paramName]);
 
 				idx++;
 				sb.Append(pTemp + "\n");
@@ -382,7 +437,7 @@ namespace {{NAME_SPACE}}
 		}
 
 		//Devuelve el código que crea los OracleParameters y les asigna su valor
-		public string GetOraParamsDemas(Tabla tabla)
+		public string GetOraParamsInsert(Tabla tabla, bool incluirPK)
 		{
 			/*string plantillaParam = @"				
 				oParam[{{IDX}}] = new OracleParameter(""{{PARAM_NAME}}"", OracleDbType.{{PARAM_ADO_TYPE}});
@@ -399,7 +454,16 @@ namespace {{NAME_SPACE}}
 			string pTemp = plantillaParam;
 
 			string pkType = tabla.pkAdoType;
-			
+
+			if (incluirPK)
+			{
+				pTemp = pTemp.Replace("{{IDX}}", idx.ToString());
+				pTemp = pTemp.Replace("{{PARAM_NAME}}", tabla.pkParamName);
+				pTemp = pTemp.Replace("{{PARAM_ADO_TYPE}}", tabla.pkAdoType + ", 9");
+				pTemp = pTemp.Replace("{{PROP_NAME}}", tabla.pkPropName);
+				idx++;
+				sb.Append(pTemp + "\n");
+			}
 			foreach (KeyValuePair<string, string> kv in tabla.mapeo)
 			{
 				pTemp = plantillaParam;

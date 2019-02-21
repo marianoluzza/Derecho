@@ -24,13 +24,25 @@ namespace Derecho.Transformadores
 				switch (limpia)
 				{
 					case var x when x.ToLower().StartsWith("create table")://CREATE TABLE
+						int indicePunto = x.IndexOf('.');
+						entidad = new Entidad();
+						if (indicePunto > 0)
+						{
+							index1 = x.IndexOf('\"');
+							if (index1 < 0)
+								throw new FormatException("CREATE TABLE sin nombre de ns <" + x + ">");
+							index2 = x.IndexOf('\"', index1 + 1);
+							if (index2 < 0)
+								throw new FormatException("CREATE TABLE sin comillas finales <" + x + ">");
+							entidad.NombreNamespace = x.Substring(index1 + 1, index2 - index1 - 1);
+							x = x.Substring(index2 + 1);
+						}
 						index1 = x.IndexOf('\"');
 						if (index1 < 0)
 							throw new FormatException("CREATE TABLE sin nombre de tabla <" + x + ">");
 						index2 = x.IndexOf('\"', index1 + 1);
 						if (index2 < 0)
 							throw new FormatException("CREATE TABLE sin comillas finales <" + x + ">");
-						entidad = new Entidad();
 						entidad.NombreTabla = x.Substring(index1 + 1, index2 - index1 - 1);
 						entidades.Add(entidad);
 						enTabla = true;
